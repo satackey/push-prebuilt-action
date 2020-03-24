@@ -1,5 +1,10 @@
 name: Release JavaScript GitHub Action
 description: There is no need to commit node_modules.
+
+branding:
+  icon: git-branch
+  color: white
+
 inputs:
   release-branch:
     description: The name of branch to push compiled file.
