@@ -132,6 +132,7 @@ const buildAction = async () => {
     const { code } = await ncc(`${process.cwd()}/${file}`, {
       minify: true,
     })
+    fs.mkdirsync('dist')
     fs.writeFileSync(dist, code, 'utf8')
     return dist
   }
@@ -143,6 +144,7 @@ const buildAction = async () => {
 
   const { actionConfig, path } = readActionConfig()
   const mainfile = await getMainFileFrom(actionConfig)
+  console.log({ mainfile })
   actionConfig.runs.main = await build(mainfile)
   save(actionConfig, path)
 
