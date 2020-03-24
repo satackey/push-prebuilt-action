@@ -15,5 +15,5 @@ inputs:
     required: true
 
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: node12
+  main: app.js
