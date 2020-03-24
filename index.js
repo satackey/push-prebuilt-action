@@ -3,6 +3,15 @@ const exec = require('@actions/exec')
 const fs = require('fs')
 const yaml = require('js-yaml')
 
+const exists = path => {
+  try {
+    exists(path);
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 const execAsync = async (command, args, options) => {
   let stdout = ''
   let stderr = ''
@@ -60,17 +69,17 @@ const installWithYarnStrictly = async () => {
 const installDependencies = async () => {
   const log = (file, pkg ,level='info') => `${level}: ${file} found. Install dependencies with ${pkg}.`
 
-  if (fs.statSync('package.json')) {
+  if (exists('package.json')) {
     throw new Error('error: package.json not found.')
   }
 
-  if (fs.statSync('package-lock.json')) {
+  if (exists('package-lock.json')) {
     console.log(log('package-lock.json', 'npm'))
     await installWithNpmStrictly()
     return
   }
 
-  if (fs.statSync('yarn.lock')) {
+  if (exists('yarn.lock')) {
     console.log(log('yarn.lock', 'yarn'))
     await installWithYarnStrictly()
     return
@@ -84,9 +93,9 @@ const buildAction = async () => {
   const readActionConfig = () => {
     let path = ''
   
-    if (fs.statSync('action.yml')) {
+    if (exists('action.yml')) {
       path = 'action.yml'
-    } else if (fs.statSync('action.yaml')) {
+    } else if (exists('action.yaml')) {
       path = 'action.yaml'
     } else {
       throw new Error('error: action.yml or action.yaml not found.')
