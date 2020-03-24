@@ -1,18 +1,12 @@
-name: 'Install amplify & pull env'
-description: 'Install amplify globally, and pull env by specific name'
+name: Release JavaScript GitHub Action
+description: There is no need to commit node_modules.
 inputs:
-  access-key-id:
+  release-branch:
+    description: The name of branch to push compiled file.
     required: true
-  secret-access-key:
-    required: true
-  region:
-    required: true
-  prject-name:
-    required: true
-  app-id:
-    required: true
-  env-name:
-    required: true
+  release-tags:
+    description: The names of the tag to attach to the commit of the compiled file.
+    required: false
 
 runs:
   using: node12
