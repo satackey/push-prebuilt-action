@@ -24,10 +24,10 @@ jobs:
     - name: Extract
       id: extract
       run: |
-        echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Release
       uses: './.'
       with:
-        release-branch: release-${{ steps.extact.outputs.branch }}
+        release-branch: release-${{ steps.extract.outputs.branch }}
 

@@ -142,13 +142,13 @@ const buildAction = async () => {
   actionConfig.runs.main = await build(mainfile)
   save(actionConfig, path)
 
-  return path
+  return path, mainfile
 }
 
-const clean = configPath => {
+const clean = (...excludePaths) => {
   core.startGroup('clean files')
   const ls = fs.readdirSync('.')
-  const leaves = ['.git', 'dist', configPath]
+  const leaves = ['.git', 'dist', ...excludePaths]
   const toBeRemoved = ls.filter(path => !leaves.includes(path))
   console.log({ ls, leaves, toBeRemoved })
   toBeRemoved.forEach(path => rimraf.sync(path))
@@ -187,8 +187,8 @@ const main = async () => {
   await configureGit()
   await installNcc()
   await installDependencies()
-  const configPath = await buildAction()
-  clean(configPath)
+  const builtFiles = await buildAction()
+  clean(...builtFiles)
   await push(releaseBranch, tags)
 }
 
