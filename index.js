@@ -142,7 +142,7 @@ const buildAction = async () => {
   actionConfig.runs.main = await build(mainfile)
   save(actionConfig, path)
 
-  return path, mainfile
+  return path
 }
 
 const clean = (...excludePaths) => {
@@ -188,7 +188,7 @@ const main = async () => {
   await installNcc()
   await installDependencies()
   const builtFiles = await buildAction()
-  clean(...builtFiles)
+  clean(builtFiles)
   await push(releaseBranch, tags)
 }
 
