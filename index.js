@@ -5,7 +5,7 @@ const yaml = require('js-yaml')
 
 const exists = path => {
   try {
-    exists(path);
+    fs.statSync(path);
     return true
   } catch (e) {
     return false
