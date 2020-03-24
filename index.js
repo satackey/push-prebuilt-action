@@ -130,6 +130,7 @@ const buildAction = async () => {
     const dist = `dist/${file}`
     core.startGroup('ncc build')
     const { code } = await ncc(`${process.cwd()}/${file}`, {
+      cache: false,
       minify: true,
     })
     fs.mkdirSync('dist')
