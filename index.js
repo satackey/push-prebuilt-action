@@ -151,13 +151,7 @@ const clean = configPath => {
   const leaves = ['.git', 'dist', configPath]
   const toBeRemoved = ls.filter(path => !leaves.includes(path))
   console.log({ ls, leaves, toBeRemoved })
-  toBeRemoved.forEach(path => {
-    // if (fs.lstatSync(path).isDirectory()) {
-    //   fs.rmdirSync(path)
-    // }
-    // fs.unlinkSync(path)
-    rimraf.sync(path)
-  })
+  toBeRemoved.forEach(rimraf.sync)
   core.endGroup()
 }
 
@@ -171,7 +165,9 @@ const push = async (branch, ...tags) => {
   await execAsync('git checkout -b ', [branch])
   await execAsync('git add .')
   await execAsync('git commit -m [auto]')
-  await execAsync('git tag', tags)
+  if (tags.length > 0) {
+    await execAsync('git tag', tags)
+  }
   await execAsync('git push -f -u origin', [branch, '--follow-tags'])
   core.endGroup()
 }
