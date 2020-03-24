@@ -138,7 +138,6 @@ const buildAction = async () => {
     const distFiles = {}
     distFiles[file] = code
     Object.entries(assets).forEach(([key, asset]) => {
-      console.log({key, asset})
       distFiles[key] = asset.source
     })
 
