@@ -70,17 +70,17 @@ const installWithYarnStrictly = async () => {
 const installDependencies = async () => {
   const log = (file, pkg ,level='info') => `${level}: ${file} found. Install dependencies with ${pkg}.`
 
-  if (exists('package.json')) {
+  if (!exists('package.json')) {
     throw new Error('error: package.json not found.')
   }
 
-  if (exists('package-lock.json')) {
+  if (!exists('package-lock.json')) {
     console.log(log('package-lock.json', 'npm'))
     await installWithNpmStrictly()
     return
   }
 
-  if (exists('yarn.lock')) {
+  if (!exists('yarn.lock')) {
     console.log(log('yarn.lock', 'yarn'))
     await installWithYarnStrictly()
     return
