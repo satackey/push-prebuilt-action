@@ -1,6 +1,6 @@
-# Release JavaScript GitHub Action
+# Push pre-built JavaScript GitHub Action
 
-This GitHub Action compiles JavaScript GitHub Action into a single file (with caches), and pushes it to GitHub.
+This GitHub Action compiles JavaScript GitHub Action into a single file (with cache files), and pushes it to GitHub.
 Compilation is powered by [zeit/ncc](https://github.com/zeit/ncc).
 
 Since there is no need to commit `node_modules`, your GitHub Action can be released quickly
@@ -9,12 +9,21 @@ with less time for pushes during action development and pulls during CI executio
 > This Action has been compiled by itself and released.
 > [See pre-built commit](https://github.com/satackey/release-js-action/tree/release-master)
 
+## Description
+1. This action compiles a file (e.g. `index.js`) specified by `runs.main` in `action.yml` or `action.yaml` into `dist/index.js`
+1. Replaces the value of `runs.main` with `dist/index.js`.
+1. Remove files exclude `/action.ya?ml/` and `dist/*`.
+1. Checkout a new branch with the name specified in `release-branch` of inputs.
+1. Commit all changes.
+1. If `release-tags` are specified, they are will be added to the commit.
+1. Force push new branch (and tags) to the `origin`
+
 ## Inputs
 - `release-branch` **Required**  
     The name of branch to push compiled file.
 
 - `release-tags` optional  
-    The names of the tag to attach to the commit of the compiled file.
+    The names to tag the compiled file commit.
 
 ## Contribution
 PRs are accepted.
@@ -53,7 +62,7 @@ jobs:
       uses: satackey/release-js-action@v0.0.1
       with:
         release-branch: release-${{ steps.name.outputs.branch }}
-        # You can tag the commit by uncommenting following line
+        # The commit can be tagged as follows
         # release-tags: v1 v1.0 v1.0.0
 ```
 
