@@ -127,12 +127,15 @@ const buildAction = async () => {
   }
   
   const build = async file => {
-    const dist = `dist/${file}`
+    // const dist = `dist/${file}`
+    const dist = `dist/index.js`
     core.startGroup('ncc build')
-    const { code } = await ncc(`${process.cwd()}/${file}`, {
-      cache: false,
-      // minify: true,
-    })
+    // const { code } = await ncc(`${process.cwd()}/${file}`, {
+    //   cache: false,
+    //   // minify: true,
+    //   v8cache: true,
+    // })
+    await execAsync(`ncc build ${file} --v8-cache`)
     fs.mkdirSync('dist')
     fs.writeFileSync(dist, code, 'utf8')
     return dist
