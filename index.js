@@ -150,8 +150,11 @@ const clean = configPath => {
   const leaves = ['.git', 'dist', configPath]
   const toBeRemoved = ls.filter(path => !leaves.includes(path))
   console.log({ ls, leaves, toBeRemoved })
-  toBeRemoved.forEach(file => {
-    fs.unlinkSync(file)
+  toBeRemoved.forEach(path => {
+    if (fs.lstatSync(path).isDirectory()) {
+      fs.rmdirSync(path)
+    }
+    fs.unlinkSync(path)
   })
   core.endGroup()
 }
