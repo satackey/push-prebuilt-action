@@ -128,7 +128,7 @@ const buildAction = async () => {
   const build = async file => {
     const dist = 'dist/index.js'
     core.startGroup('ncc build')
-    await execAsync(`ncc build ${file} -o ${dist}`)
+    await execAsync(`ncc build ${file}`)
     return dist
   }
   
