@@ -9,6 +9,16 @@ with less time for pushes during action development and pulls during CI executio
 > This Action has been compiled by itself and released.
 > [See pre-built commit](https://github.com/satackey/push-js-action/tree/release-master)
 
+## Example (short ver.)
+```yaml
+    - # To use latest action, specify "release-master" instead of "v0.0.2"
+      uses: satackey/push-js-action@v0.0.2
+      with:
+        push-branch: release-YOUR_BRANCH_NAME
+        # [optional] The commit can be tagged as follows
+        # release-tags: v1 v1.0 v1.0.0
+```
+
 ## Description
 1. This action compiles a file (e.g. `index.js`) specified by `runs.main` in `action.yml` or `action.yaml` into `dist/index.js`
 1. Replaces the value of `runs.main` with `dist/index.js`.
@@ -30,7 +40,7 @@ PRs are accepted.
 
 If you are having trouble or future request, [post new issue](https://github.com/satackey/push-js-action/issues/new).
 
-## Example
+## Example (long ver.)
 
 ```yaml
 name: Push pre-built action
