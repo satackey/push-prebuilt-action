@@ -9,6 +9,7 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
+    "@zeit/ncc": "^0.22.0",
     "js-yaml": "^3.13.1",
     "rimraf": "^3.0.2"
   }

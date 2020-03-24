@@ -19,6 +19,11 @@
   resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.0.2.tgz#2f614b6e69ce14d191180451eb38e6576a6e6b27"
   integrity sha512-J8KuFqVPr3p6U8W93DOXlXW6zFvrQAJANdS+vw0YhusLIq+bszW8zmK2Fh1C2kDPX8FMvwIl1OUcFgvJoXLbAg==
 
+"@zeit/ncc@^0.22.0":
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/@zeit/ncc/-/ncc-0.22.0.tgz#1a4132a375a2ffd1d6d632b0fdd9027154f6141a"
+  integrity sha512-zaS6chwztGSLSEzsTJw9sLTYxQt57bPFBtsYlVtbqGvmDUsfW7xgXPYofzFa1kB9ur2dRop6IxCwPnWLBVCrbQ==
+
 argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"
