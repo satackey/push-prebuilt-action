@@ -135,9 +135,9 @@ const buildAction = async () => {
     //   // minify: true,
     //   v8cache: true,
     // })
+    // fs.mkdirSync('dist')
+    // fs.writeFileSync(dist, code, 'utf8')
     await execAsync(`ncc build ${file} --v8-cache`)
-    fs.mkdirSync('dist')
-    fs.writeFileSync(dist, code, 'utf8')
     return dist
   }
   
