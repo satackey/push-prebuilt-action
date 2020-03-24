@@ -30,7 +30,7 @@ jobs:
     - name: Copy @zeit/ncc loaders
       run: |
         mkdir -p dist
-        cp node_modules/@zeit/ncc/src/loaders dist/
+        cp -r node_modules/@zeit/ncc/src/loaders dist/
 
 
     - name: Extract
