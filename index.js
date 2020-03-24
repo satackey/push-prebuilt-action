@@ -179,7 +179,8 @@ const main = async () => {
   // const branch = ref.split('/').slice(-1)[0]
 
   const releaseBranch = core.getInput('release-branch', { required: true })
-  const tags = ('' || core.getInput('release-tags')).split(' ')
+
+  const tags = core.getInput('release-tags') == null ? [] : core.getInput('release-tags').split(' ')
 
   await configureGit()
   await installNcc()
