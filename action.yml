@@ -1,0 +1,19 @@
+name: 'Install amplify & pull env'
+description: 'Install amplify globally, and pull env by specific name'
+inputs:
+  access-key-id:
+    required: true
+  secret-access-key:
+    required: true
+  region:
+    required: true
+  prject-name:
+    required: true
+  app-id:
+    required: true
+  env-name:
+    required: true
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

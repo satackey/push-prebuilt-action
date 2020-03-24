@@ -1,0 +1,175 @@
+const core = require('@actions/core')
+const exec = require('@actions/exec')
+const fs = require('fs')
+const yaml = require('js-yaml')
+
+const execAsync = async (command, args, options) => {
+  let stdout = ''
+  let stderr = ''
+
+  const exitCode = await exec.exec(command, args, {
+    listeners: {
+      stdout: data => {
+        stdout += data.toString()
+      },
+      stderr(data) {
+        stdout += data.toString()
+      },
+    },
+    ...options,
+  })
+
+  return {
+    exitCode,
+    stdout,
+    stderr,
+  }
+}
+
+const configureGit = async () => {
+  core.startGroup('git config')
+  await execAsync('git config --global user.name github-actions')
+  await execAsync('git config --global user.email actions@github.com')
+  core.endGroup()
+}
+
+const installNcc = async () => {
+  core.startGroup('npm install -g @zeit/ncc')
+  await execAsync('npm install -g @zeit/ncc')
+  core.endGroup()
+}
+
+const installWithNpm = async () => {
+  core.startGroup('npm install')
+  await execAsync('npm install')
+  core.endGroup()
+}
+
+const installWithNpmStrictly = async () => {
+  core.startGroup('npm ci')
+  await execAsync('npm ci')
+  core.endGroup()
+}
+
+const installWithYarnStrictly = async () => {
+  core.startGroup('yarn install --frozen-lockfile --non-interactive')
+  await execAsync('yarn install --frozen-lockfile --non-interactive')
+  core.endGroup()
+}
+
+const installDependencies = async () => {
+  const log = (file, pkg ,level='info') => `${level}: ${file} found. Install dependencies with ${pkg}.`
+
+  if (fs.existsSync('package.json')) {
+    throw new Error('error: package.json not found.')
+  }
+
+  if (fs.existsSync('package-lock.json')) {
+    console.log(log('package-lock.json', 'npm'))
+    await installWithNpmStrictly()
+    return
+  }
+
+  if (fs.existsSync('yarn.lock')) {
+    console.log(log('yarn.lock', 'yarn'))
+    await installWithYarnStrictly()
+    return
+  }
+
+  console.warn(log('package-lock.json or yarn.lock not', 'npm', 'warn'))
+  await installWithNpm()
+}
+
+const buildAction = async () => {
+  const readActionConfig = () => {
+    let path = ''
+  
+    if (fs.existsSync('action.yml')) {
+      path = 'action.yml'
+    } else if (fs.existsSync('action.yaml')) {
+      path = 'action.yaml'
+    } else {
+      throw new Error('error: action.yml or action.yaml not found.')
+    }
+  
+    const actionConfig = yaml.safeLoad(fs.readFileSync(path, 'utf8'))
+  
+    return {
+      path, actionConfig
+    }
+  }
+  
+  const getMainFileFrom = actionConfig => {
+    if (actionConfig == null || actionConfig.runs == null){
+      throw new Error(`error: Key run.main doesn't exist.`)
+    }
+  
+    if (typeof actionConfig.runs.main !== 'string'){
+      throw new Error(`error: run.main is ${typeof actionConfig.runs.main}, not string.`)
+    }
+  
+    return actionConfig.runs.main
+  }
+  
+  const build = async file => {
+    const dist = 'dist/index.js'
+    core.startGroup('npm ci')
+    await execAsync(`ncc build ${file} -o ${dist}`)
+    return dist
+  }
+  
+  const save = (config, saveAs) => {
+    const yamlText = yaml.dump(config)
+    fs.writeFileSync(saveAs, yamlText, 'utf8')
+  }
+
+  const { actionConfig, path } = readActionConfig()
+  const mainfile = await getMainFileFrom(actionConfig)
+  actionConfig.runs.main = await build(mainfile)
+  save(newActionConfig, path)
+}
+
+const clean = async configPath => {
+  const ls = []
+  const leaves = ['.git', 'dist', configPath]
+  const toBeRemoved = ls.map(path => !(path in leaves))
+  for (file in toBeRemoved) {
+    fs.unlinkSync(file)
+  }
+}
+
+const push = async (branch, ...tags) => {
+  // git checkout -b release-${GITHUB_REF#refs/heads/}
+  // git add .
+  // git commit -m "[auto]"
+  // git push -f -u origin release-${GITHUB_REF#refs/heads/}
+
+  core.startGroup('git')
+  await execAsync('git checkout -b ', [branch])
+  await execAsync('git add .')
+  await execAsync('git commit -m [auto]')
+  await execAsync('git tag', tags)
+  await execAsync('git push -f -u origin', [branch, '--follow-tags'])
+  core.endGroup()
+}
+
+const main = async () => {
+  // const ref = core.getInput('ref', { required: true })
+
+  // // refs/heads/master → master
+  // const branch = ref.split('/').slice(-1)[0]
+
+  const releaseBranch = core.getInput('release-branch', { required: true })
+  const tags = ('' || core.getInput('release-tags')).split(' ')
+
+  await configureGit()
+  await installNcc()
+  await installDependencies()
+  await buildAction()
+  await clean()
+  await push(releaseBranch, ...tags)
+}
+
+main().catch(e => {
+  core.setFailed(e.message || JSON.stringify(e))
+})
