@@ -131,7 +131,7 @@ const buildAction = async () => {
     core.startGroup('ncc build')
     const { code } = await ncc(`${process.cwd()}/${file}`, {
       cache: false,
-      minify: true,
+      // minify: true,
     })
     fs.mkdirSync('dist')
     fs.writeFileSync(dist, code, 'utf8')
