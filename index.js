@@ -147,6 +147,7 @@ const clean = configPath => {
   const ls = fs.readdirSync('.')
   const leaves = ['.git', 'dist', configPath]
   const toBeRemoved = ls.filter(path => !(path in leaves))
+  console.log({ ls, leaves, toBeRemoved })
   for (file in toBeRemoved) {
     fs.unlinkSync(file)
   }
