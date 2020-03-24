@@ -127,7 +127,7 @@ const buildAction = async () => {
   }
   
   const build = async file => {
-    const dist = `dist/${file}`
+    const distMain = `dist/${file}`
     core.startGroup('ncc build')
     const { code, assets } = await ncc(`${process.cwd()}/${file}`, {
       cache: false,
