@@ -151,7 +151,7 @@ const clean = configPath => {
   const leaves = ['.git', 'dist', configPath]
   const toBeRemoved = ls.filter(path => !leaves.includes(path))
   console.log({ ls, leaves, toBeRemoved })
-  toBeRemoved.forEach(rimraf.sync)
+  toBeRemoved.forEach(path => rimraf.sync(path))
   core.endGroup()
 }
 
