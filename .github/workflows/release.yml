@@ -21,8 +21,11 @@ jobs:
     - name: Install dependencies
       run: |
         yarn install --frozen-lockfile --non-interactive
-        cd node_modules/@zeit/ncc
-        yarn install --non-interactive
+
+    - name: Install @zeit/ncc dependencies
+      working-directory: node_modules/@zeit/ncc
+      run: |
+        yarn install --non-interactive || true
 
 
     - name: Extract
