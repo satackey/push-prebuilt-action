@@ -132,7 +132,7 @@ const buildAction = async () => {
     const { code } = await ncc(`${process.cwd()}/${file}`, {
       minify: true,
     })
-    fs.mkdirsync('dist')
+    fs.mkdirSync('dist')
     fs.writeFileSync(dist, code, 'utf8')
     return dist
   }
