@@ -2,6 +2,7 @@ const core = require('@actions/core')
 const exec = require('@actions/exec')
 const fs = require('fs')
 const yaml = require('js-yaml')
+const rimraf = require('rimraf')
 
 const exists = path => {
   try {
@@ -151,10 +152,11 @@ const clean = configPath => {
   const toBeRemoved = ls.filter(path => !leaves.includes(path))
   console.log({ ls, leaves, toBeRemoved })
   toBeRemoved.forEach(path => {
-    if (fs.lstatSync(path).isDirectory()) {
-      fs.rmdirSync(path)
-    }
-    fs.unlinkSync(path)
+    // if (fs.lstatSync(path).isDirectory()) {
+    //   fs.rmdirSync(path)
+    // }
+    // fs.unlinkSync(path)
+    rimraf.sync(path)
   })
   core.endGroup()
 }
