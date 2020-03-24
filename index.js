@@ -130,7 +130,7 @@ const buildAction = async () => {
 }
 
 const clean = async configPath => {
-  const ls = []
+  const ls = fs.readdirSync('.')
   const leaves = ['.git', 'dist', configPath]
   const toBeRemoved = ls.map(path => !(path in leaves))
   for (file in toBeRemoved) {
@@ -164,6 +164,7 @@ const main = async () => {
 
   await configureGit()
   await installNcc()
+  console.log(process.cwd())
   await installDependencies()
   await buildAction()
   await clean()
