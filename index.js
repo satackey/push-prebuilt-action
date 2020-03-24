@@ -155,7 +155,7 @@ const clean = configPath => {
   core.endGroup()
 }
 
-const push = async (branch, ...tags) => {
+const push = async (branch, tags) => {
   // git checkout -b release-${GITHUB_REF#refs/heads/}
   // git add .
   // git commit -m "[auto]"
@@ -188,7 +188,7 @@ const main = async () => {
   await installDependencies()
   const configPath = await buildAction()
   clean(configPath)
-  await push(releaseBranch, ...tags)
+  await push(releaseBranch, tags)
 }
 
 main().catch(e => {
