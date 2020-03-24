@@ -27,6 +27,11 @@ jobs:
       run: |
         yarn install --non-interactive || true
 
+    - name: Copy @zeit/ncc loaders
+      run: |
+        mkdir -p dist
+        cp node_modules/@zeit/ncc/src/loaders dist/
+
 
     - name: Extract
       id: extract
