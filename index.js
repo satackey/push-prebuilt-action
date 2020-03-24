@@ -195,7 +195,7 @@ const main = async () => {
     ? core.getInput('release-tags').split(' ') : []
 
   await configureGit()
-  // await installNcc()
+  await installNcc()
   await installDependencies()
   const builtFiles = await buildAction()
   clean(builtFiles)
