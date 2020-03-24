@@ -7,19 +7,19 @@ Since there is no need to commit `node_modules`, your GitHub Action can be relea
 with less time for pushes during action development and pulls during CI execution.
 
 > This Action has been compiled by itself and released.
-> [See pre-built commit](https://github.com/satackey/release-js-action/tree/release-master)
+> [See pre-built commit](https://github.com/satackey/push-js-action/tree/release-master)
 
 ## Description
 1. This action compiles a file (e.g. `index.js`) specified by `runs.main` in `action.yml` or `action.yaml` into `dist/index.js`
 1. Replaces the value of `runs.main` with `dist/index.js`.
 1. Remove files exclude `/action.ya?ml/` and `dist/*`.
-1. Checkout a new branch with the name specified in `release-branch` of inputs.
+1. Checkout a new branch with the name specified in `push-branch` of inputs.
 1. Commit all changes.
 1. If `release-tags` are specified, they are will be added to the commit.
 1. Force push new branch (and tags) to the `origin`
 
 ## Inputs
-- `release-branch` **Required**  
+- `push-branch` **Required**  
     The name of branch to push compiled file.
 
 - `release-tags` optional  
@@ -28,11 +28,12 @@ with less time for pushes during action development and pulls during CI executio
 ## Contribution
 PRs are accepted.
 
-If you are having trouble or future request, [post new issue](https://github.com/satackey/release-js-action/issues/new).
+If you are having trouble or future request, [post new issue](https://github.com/satackey/push-js-action/issues/new).
 
 ## Example
+
 ```yaml
-name: Relase distribution
+name: Push pre-built action
 
 on:
   push:
@@ -57,13 +58,13 @@ jobs:
       run: |
         echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
-    - name: Release
-      # To use latest action, specify "release-master" instead of "v0.0.1"
-      uses: satackey/release-js-action@v0.0.1
+    - name: Push
+      # To use latest action, specify "release-master" instead of "v0.0.2"
+      uses: satackey/push-js-action@v0.0.2
       with:
-        release-branch: release-${{ steps.name.outputs.branch }}
+        push-branch: release-${{ steps.name.outputs.branch }}
         # The commit can be tagged as follows
         # release-tags: v1 v1.0 v1.0.0
 ```
 
-The distribution is pushed into `release-<your_branch>` like `master-branch`.
+The distribution is pushed into `release-<your_branch>` like `release-master`.

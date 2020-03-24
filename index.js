@@ -181,11 +181,6 @@ const clean = (...excludePaths) => {
 }
 
 const push = async (branch, tags) => {
-  // git checkout -b release-${GITHUB_REF#refs/heads/}
-  // git add .
-  // git commit -m "[auto]"
-  // git push -f -u origin release-${GITHUB_REF#refs/heads/}
-
   core.startGroup('git')
   await execAsync('git checkout -b ', [branch])
   await execAsync('git add .')
@@ -204,7 +199,7 @@ const main = async () => {
   // // refs/heads/master → master
   // const branch = ref.split('/').slice(-1)[0]
 
-  const releaseBranch = core.getInput('release-branch', { required: true })
+  const releaseBranch = core.getInput('push-branch', { required: true })
 
   const tags = typeof core.getInput('release-tags') === 'string' && core.getInput('release-tags').length > 0
     ? core.getInput('release-tags').split(' ') : []

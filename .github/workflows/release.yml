@@ -30,4 +30,4 @@ jobs:
     - name: Release
       uses: './.'
       with:
-        release-branch: release-${{ steps.extract.outputs.branch }}
+        push-branch: release-${{ steps.extract.outputs.branch }}
