@@ -148,7 +148,7 @@ const buildAction = async () => {
 const clean = (...excludePaths) => {
   core.startGroup('clean files')
   const ls = fs.readdirSync('.')
-  const leaves = ['.git', 'dist', ...excludePaths]
+  const leaves = [...excludePaths, '.git', 'dist']
   const toBeRemoved = ls.filter(path => !leaves.includes(path))
   console.log({ ls, leaves, toBeRemoved })
   toBeRemoved.forEach(path => rimraf.sync(path))
