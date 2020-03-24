@@ -182,7 +182,7 @@ const main = async () => {
   const releaseBranch = core.getInput('release-branch', { required: true })
 
   const tags = typeof core.getInput('release-tags') === 'string' && core.getInput('release-tags').length > 0
-    ? [] : core.getInput('release-tags').split(' ')
+    ? core.getInput('release-tags').split(' ') : []
 
   await configureGit()
   await installNcc()
