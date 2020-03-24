@@ -8,10 +8,10 @@ with less time for pushes during action development and pulls during CI executio
 
 
 ## Inputs
-- `release-branch` **Required**
+- `release-branch` **Required**  
     The name of branch to push compiled file.
 
-- `release-tags` optional
+- `release-tags` optional  
     The names of the tag to attach to the commit of the compiled file.
 
 ## Example
