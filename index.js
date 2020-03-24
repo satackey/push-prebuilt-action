@@ -8,7 +8,10 @@ const exists = path => {
     fs.statSync(`${process.cwd()}/${path}`);
     return true
   } catch (e) {
-    console.log(e)
+    if (!e.message.includes('no such file or directory')) {
+      throw e
+    }
+
     return false
   }
 }
@@ -74,13 +77,13 @@ const installDependencies = async () => {
     throw new Error('error: package.json not found.')
   }
 
-  if (!exists('package-lock.json')) {
+  if (exists('package-lock.json')) {
     console.log(log('package-lock.json', 'npm'))
     await installWithNpmStrictly()
     return
   }
 
-  if (!exists('yarn.lock')) {
+  if (exists('yarn.lock')) {
     console.log(log('yarn.lock', 'yarn'))
     await installWithYarnStrictly()
     return
