@@ -130,15 +130,19 @@ const buildAction = async () => {
     // const dist = `dist/${file}`
     const dist = `dist/index.js`
     core.startGroup('ncc build')
-    const { code } = await ncc(`${process.cwd()}/${file}`, {
-      cache: `${process.cwd()}/dist`,
-      // minify: true,
+    const { code, assets } = await ncc(`${process.cwd()}/${file}`, {
+      cache: false,
+      minify: true,
       v8cache: true,
 
     })
-    // fs.mkdirSync('dist')
-    fs.writeFileSync(dist, code, 'utf8')
-    // await execAsync(`ncc build ${file} --v8-cache`)
+    assets[file] = code
+
+    fs.mkdirSync('dist')
+    Object.entries(assets).forEach(([key, value]) => {
+      fs.writeFileSync(`dist/${key}`, value, 'utf8')
+    })
+
     return dist
   }
   
@@ -149,7 +153,6 @@ const buildAction = async () => {
 
   const { actionConfig, path } = readActionConfig()
   const mainfile = await getMainFileFrom(actionConfig)
-  console.log({ mainfile })
   actionConfig.runs.main = await build(mainfile)
   save(actionConfig, path)
 
@@ -196,7 +199,6 @@ const main = async () => {
     ? core.getInput('release-tags').split(' ') : []
 
   await configureGit()
-  await installNcc()
   await installDependencies()
   const builtFiles = await buildAction()
   clean(builtFiles)
@@ -204,5 +206,6 @@ const main = async () => {
 }
 
 main().catch(e => {
+  console.error(e)
   core.setFailed(e.message || JSON.stringify(e))
 })
