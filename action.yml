@@ -16,4 +16,4 @@ inputs:
 
 runs:
   using: node12
-  main: app.js
+  main: index.js
