@@ -127,23 +127,27 @@ const buildAction = async () => {
   }
   
   const build = async file => {
-    // const dist = `dist/${file}`
-    const dist = `dist/index.js`
+    const dist = `dist/${file}`
     core.startGroup('ncc build')
     const { code, assets } = await ncc(`${process.cwd()}/${file}`, {
       cache: false,
       minify: true,
       v8cache: true,
-
     })
-    assets[file] = code
+
+    const distFiles = {}
+    distFiles[file] = code
+    Object.entries(assets).forEach(([key, asset]) => {
+      console.log({key, asset})
+      distFiles[key] = asset.source
+    })
 
     fs.mkdirSync('dist')
-    Object.entries(assets).forEach(([key, value]) => {
+    Object.entries(distFiles).forEach(([key, value]) => {
       fs.writeFileSync(`dist/${key}`, value, 'utf8')
     })
 
-    return dist
+    return distMain
   }
   
   const save = (config, saveAs) => {
