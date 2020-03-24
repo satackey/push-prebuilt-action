@@ -142,13 +142,15 @@ const buildAction = async () => {
   save(actionConfig, path)
 }
 
-const clean = async configPath => {
+const clean = configPath => {
+  core.startGroup('clean files')
   const ls = fs.readdirSync('.')
   const leaves = ['.git', 'dist', configPath]
-  const toBeRemoved = ls.map(path => !(path in leaves))
+  const toBeRemoved = ls.filter(path => !(path in leaves))
   for (file in toBeRemoved) {
     fs.unlinkSync(file)
   }
+  core.endGroup()
 }
 
 const push = async (branch, ...tags) => {
@@ -179,7 +181,7 @@ const main = async () => {
   await installNcc()
   await installDependencies()
   await buildAction()
-  await clean()
+  clean()
   await push(releaseBranch, ...tags)
 }
 
