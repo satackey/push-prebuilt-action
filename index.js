@@ -3,7 +3,7 @@ const exec = require('@actions/exec')
 const fs = require('fs')
 const yaml = require('js-yaml')
 const rimraf = require('rimraf')
-const ncc = require('./node_modules/@zeit/ncc/src/index.js')
+// const ncc = require('./node_modules/@zeit/ncc/src/index.js')
 
 const exists = path => {
   try {
@@ -127,6 +127,7 @@ const buildAction = async () => {
   }
   
   const build = async file => {
+    /*
     const distMain = `dist/${file}`
     core.startGroup('ncc build')
     const { code, assets } = await ncc(`${process.cwd()}/${file}`, {
@@ -148,6 +149,10 @@ const buildAction = async () => {
       fs.mkdirSync(`dist/${saveDir}`, { recursive: true })
       fs.writeFileSync(`dist/${key}`, value, 'utf8')
     })
+    */
+
+    const distMain = 'dist/index.js'
+    await execAsync(`ncc build ${file} --v8-cache`)
 
     return distMain
   }
@@ -205,6 +210,7 @@ const main = async () => {
     ? core.getInput('release-tags').split(' ') : []
 
   await configureGit()
+  await installNcc()
   await installDependencies()
   const builtFiles = await buildAction()
   clean(builtFiles)

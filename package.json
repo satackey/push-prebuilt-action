@@ -9,7 +9,6 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/exec": "^1.0.3",
-    "@zeit/ncc": "https://github.com/zeit/ncc.git",
     "js-yaml": "^3.13.1",
     "rimraf": "^3.0.2"
   }
