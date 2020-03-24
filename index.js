@@ -164,7 +164,7 @@ const main = async () => {
 
   await configureGit()
   await installNcc()
-  console.log(process.cwd())
+  console.log(JSON.stringify(fs.readdirSync('.')))
   await installDependencies()
   await buildAction()
   await clean()
