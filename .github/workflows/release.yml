@@ -27,7 +27,7 @@ jobs:
         echo "##[set-output name=branch]${GITHUB_REF#refs/heads/}"
 
     - name: Release
-      uses: '.'
+      uses: './.'
       with:
         release-branch: release-${{ steps.extact.outputs.branch }}
 
