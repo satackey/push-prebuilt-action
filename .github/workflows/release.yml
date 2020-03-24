@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         yarn install --frozen-lockfile
-        cd node_modules/@zeit/ncc/src/index.js
+        cd node_modules/@zeit/ncc
         yarn install --frozen-lockfile
 
 
