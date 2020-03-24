@@ -1,4 +1,4 @@
-# release-js-action
+# Release JavaScript GitHub Action
 
 This GitHub Action compiles JavaScript GitHub Action into a single file (with caches), and pushes it to GitHub.
 Compilation is powered by [zeit/ncc](https://github.com/zeit/ncc).
@@ -42,7 +42,7 @@ jobs:
         echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Release
-      uses: satackey/release-js-action@release-master
+      uses: satackey/release-js-action@v0.0.1
       with:
         release-branch: release-${{ steps.name.outputs.branch }}
 ```
