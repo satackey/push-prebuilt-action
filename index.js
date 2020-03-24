@@ -5,7 +5,7 @@ const yaml = require('js-yaml')
 
 const exists = path => {
   try {
-    fs.statSync(path);
+    fs.statSync(`${process.cwd()}`/${path});
     return true
   } catch (e) {
     return false
