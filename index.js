@@ -165,6 +165,7 @@ const push = async (branch, tags) => {
   await execAsync('git checkout -b ', [branch])
   await execAsync('git add .')
   await execAsync('git commit -m [auto]')
+  console.log(tags)
   if (tags.length > 0) {
     await execAsync('git tag', tags)
   }
