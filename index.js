@@ -60,17 +60,17 @@ const installWithYarnStrictly = async () => {
 const installDependencies = async () => {
   const log = (file, pkg ,level='info') => `${level}: ${file} found. Install dependencies with ${pkg}.`
 
-  if (fs.existsSync('package.json')) {
+  if (fs.statSync('package.json')) {
     throw new Error('error: package.json not found.')
   }
 
-  if (fs.existsSync('package-lock.json')) {
+  if (fs.statSync('package-lock.json')) {
     console.log(log('package-lock.json', 'npm'))
     await installWithNpmStrictly()
     return
   }
 
-  if (fs.existsSync('yarn.lock')) {
+  if (fs.statSync('yarn.lock')) {
     console.log(log('yarn.lock', 'yarn'))
     await installWithYarnStrictly()
     return
@@ -84,9 +84,9 @@ const buildAction = async () => {
   const readActionConfig = () => {
     let path = ''
   
-    if (fs.existsSync('action.yml')) {
+    if (fs.statSync('action.yml')) {
       path = 'action.yml'
-    } else if (fs.existsSync('action.yaml')) {
+    } else if (fs.statSync('action.yaml')) {
       path = 'action.yaml'
     } else {
       throw new Error('error: action.yml or action.yaml not found.')
