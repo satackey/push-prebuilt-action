@@ -126,7 +126,7 @@ const buildAction = async () => {
   
   const build = async file => {
     const dist = 'dist/index.js'
-    core.startGroup('npm ci')
+    core.startGroup('ncc build')
     await execAsync(`ncc build ${file} -o ${dist}`)
     return dist
   }
@@ -139,7 +139,7 @@ const buildAction = async () => {
   const { actionConfig, path } = readActionConfig()
   const mainfile = await getMainFileFrom(actionConfig)
   actionConfig.runs.main = await build(mainfile)
-  save(newActionConfig, path)
+  save(actionConfig, path)
 }
 
 const clean = async configPath => {
@@ -177,7 +177,6 @@ const main = async () => {
 
   await configureGit()
   await installNcc()
-  console.log(JSON.stringify(fs.readdirSync('.')))
   await installDependencies()
   await buildAction()
   await clean()
