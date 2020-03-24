@@ -19,7 +19,11 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      run: |
+        yarn install --frozen-lockfile
+        cd node_modules/@zeit/ncc/src/index.js
+        yarn install --frozen-lockfile
+
 
     - name: Extract
       id: extract

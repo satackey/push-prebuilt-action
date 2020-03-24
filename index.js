@@ -3,7 +3,7 @@ const exec = require('@actions/exec')
 const fs = require('fs')
 const yaml = require('js-yaml')
 const rimraf = require('rimraf')
-const ncc = require('@zeit/ncc')
+const ncc = require('./node_modules/@zeit/ncc/src/index.js')
 
 const exists = path => {
   try {
@@ -141,8 +141,11 @@ const buildAction = async () => {
       distFiles[key] = asset.source
     })
 
-    fs.mkdirSync('dist')
     Object.entries(distFiles).forEach(([key, value]) => {
+      // https://stackoverflow.com/questions/818576/get-directory-of-a-file-name-in-javascript
+      const saveDir = key.split('/').reverse().splice(1).reverse().join('/')
+      console.log(`dist/${saveDir}`)
+      fs.mkdirSync(`dist/${saveDir}`, { recursive: true })
       fs.writeFileSync(`dist/${key}`, value, 'utf8')
     })
 
