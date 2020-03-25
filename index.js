@@ -1,5 +1,5 @@
 const core = require('@actions/core')
-const exec = require('@actions/exec')
+const exec = require('actions-exec-wrapper')
 const fs = require('fs')
 const yaml = require('js-yaml')
 const rimraf = require('rimraf')
@@ -18,57 +18,34 @@ const exists = path => {
   }
 }
 
-const execAsync = async (command, args, options) => {
-  let stdout = ''
-  let stderr = ''
-
-  const exitCode = await exec.exec(command, args, {
-    listeners: {
-      stdout: data => {
-        stdout += data.toString()
-      },
-      stderr(data) {
-        stdout += data.toString()
-      },
-    },
-    ...options,
-  })
-
-  return {
-    exitCode,
-    stdout,
-    stderr,
-  }
-}
-
 const configureGit = async () => {
   core.startGroup('git config')
-  await execAsync('git config --global user.name github-actions')
-  await execAsync('git config --global user.email actions@github.com')
+  await exec.exec('git config --global user.name github-actions')
+  await exec.exec('git config --global user.email actions@github.com')
   core.endGroup()
 }
 
 const installNcc = async () => {
   core.startGroup('npm install -g @zeit/ncc')
-  await execAsync('npm install -g @zeit/ncc')
+  await exec.exec('npm install -g @zeit/ncc')
   core.endGroup()
 }
 
 const installWithNpm = async () => {
   core.startGroup('npm install')
-  await execAsync('npm install')
+  await exec.exec('npm install')
   core.endGroup()
 }
 
 const installWithNpmStrictly = async () => {
   core.startGroup('npm ci')
-  await execAsync('npm ci')
+  await exec.exec('npm ci')
   core.endGroup()
 }
 
 const installWithYarnStrictly = async () => {
   core.startGroup('yarn install --frozen-lockfile --non-interactive')
-  await execAsync('yarn install --frozen-lockfile --non-interactive')
+  await exec.exec('yarn install --frozen-lockfile --non-interactive')
   core.endGroup()
 }
 
@@ -152,7 +129,7 @@ const buildAction = async () => {
     */
 
     const distMain = 'dist/index.js'
-    await execAsync(`ncc build ${file} --v8-cache`)
+    await exec.exec(`ncc build ${file} --v8-cache`)
 
     return distMain
   }
@@ -182,14 +159,14 @@ const clean = (...excludePaths) => {
 
 const push = async (branch, tags) => {
   core.startGroup('git')
-  await execAsync('git checkout -b ', [branch])
-  await execAsync('git add .')
-  await execAsync('git commit -m [auto]')
+  await exec.exec('git checkout -b ', [branch])
+  await exec.exec('git add .')
+  await exec.exec('git commit -m [auto]')
   console.log(tags)
   if (tags.length > 0) {
-    await execAsync('git tag', tags)
+    await exec.exec('git tag', tags)
   }
-  await execAsync('git push -f -u origin', [branch, '--follow-tags'])
+  await exec.exec('git push -f -u origin', [branch, '--follow-tags'])
   core.endGroup()
 }
 
