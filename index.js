@@ -1,5 +1,5 @@
 const core = require('@actions/core')
-const exec = require('actions-exec-wrapper')
+const exec = require('actions-exec-listener')
 const fs = require('fs')
 const yaml = require('js-yaml')
 const rimraf = require('rimraf')

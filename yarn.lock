@@ -19,10 +19,10 @@
   resolved "https://registry.yarnpkg.com/@actions/io/-/io-1.0.2.tgz#2f614b6e69ce14d191180451eb38e6576a6e6b27"
   integrity sha512-J8KuFqVPr3p6U8W93DOXlXW6zFvrQAJANdS+vw0YhusLIq+bszW8zmK2Fh1C2kDPX8FMvwIl1OUcFgvJoXLbAg==
 
-actions-exec-wrapper@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/actions-exec-wrapper/-/actions-exec-wrapper-0.0.3.tgz#83a0e93be314b405549b5f24daaaca9316ba1144"
-  integrity sha512-1DA6YqFqiaThfyQqKELTuVBBGQmpAecrWX0N9Lgg9UZ6Q8/dinUvxFOIONhtbbwxZiXt560zeVPB3ZJ3cdqkTA==
+actions-exec-listener@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/actions-exec-listener/-/actions-exec-listener-0.0.1.tgz#480e0ca41b34b19e3a29598691134724aeb9b1c1"
+  integrity sha512-cpRoiZ3Fs+VarnnbSQJRdkqirQTGzY8dcFOOny8iSzkqg+BZGZzUxN4Af57HjcIo2QdaFn5jljEGeQ84+7a6JQ==
   dependencies:
     "@actions/exec" "^1.0.3"
 
