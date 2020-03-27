@@ -3,6 +3,8 @@
 This GitHub Action compiles JavaScript GitHub Action into a single file (with cache files), and pushes it to GitHub.
 Compilation is powered by [zeit/ncc](https://github.com/zeit/ncc).
 
+TypeScript is also supported. Specify your *.ts file to `action.yml#runs.main` (or `action.yaml`)
+
 Since there is no need to commit `node_modules`, your GitHub Action can be released quickly
 with less time for pushes during action development and pulls during CI execution.
 
@@ -22,7 +24,7 @@ with less time for pushes during action development and pulls during CI executio
 ## Description
 1. This action compiles a file (e.g. `index.js`) specified by `runs.main` in `action.yml` or `action.yaml` into `dist/index.js`
 1. Replaces the value of `runs.main` with `dist/index.js`.
-1. Remove files exclude `/action.ya?ml/` and `dist/*`.
+1. Remove files exclude `/action.yml/` and `dist/*` (or `action.yaml`).
 1. Checkout a new branch with the name specified in `push-branch` of inputs.
 1. Commit all changes.
 1. If `release-tags` are specified, they are will be added to the commit.
