@@ -38,7 +38,7 @@ with less time for pushes during action development and pulls during CI executio
 ## Contribution
 PRs are accepted.
 
-If you are having trouble or future request, [post new issue](https://github.com/satackey/push-js-action/issues/new).
+If you are having trouble or feature request, [post new issue](https://github.com/satackey/push-js-action/issues/new).
 
 ## Example (long ver.)
 
