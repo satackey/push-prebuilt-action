@@ -21,6 +21,8 @@ with less time for pushes during action development and pulls during CI executio
         # release-tags: v1 v1.0 v1.0.0
 ```
 
+An automatic Docker builder is under development. Coming soon!
+
 ## Description
 1. This action compiles a file (e.g. `index.js`) specified by `runs.main` in `action.yml` or `action.yaml` into `dist/index.js`
 1. Replaces the value of `runs.main` with `dist/index.js`.
