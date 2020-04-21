@@ -72,7 +72,7 @@ const installDependencies = async () => {
   await installWithNpm()
 }
 
-const buildAction = async () => {
+const buildAction = async command => {
   const readActionConfig = () => {
     let path = ''
   
@@ -103,7 +103,7 @@ const buildAction = async () => {
     return actionConfig.runs.main
   }
   
-  const build = async file => {
+  const build = async (file, cmd) => {
     /*
     const distMain = `dist/${file}`
     core.startGroup('ncc build')
@@ -129,7 +129,15 @@ const buildAction = async () => {
     */
 
     const distMain = 'dist/index.js'
-    await exec.exec(`ncc build ${file} --v8-cache`)
+    let execCmd
+    if (cmd === '') {
+      // If build command not specified
+      execCmd = `ncc build ${file} --v8-cache`
+    } else {
+      execCmd = cmd
+    }
+
+    await exec.exec(cmd)
 
     return distMain
   }
@@ -141,7 +149,7 @@ const buildAction = async () => {
 
   const { actionConfig, path } = readActionConfig()
   const mainfile = await getMainFileFrom(actionConfig)
-  actionConfig.runs.main = await build(mainfile)
+  actionConfig.runs.main = await build(mainfile, command)
   save(actionConfig, path)
 
   return path
@@ -180,13 +188,14 @@ const main = async () => {
 
   const tags = typeof core.getInput('release-tags') === 'string' && core.getInput('release-tags').length > 0
     ? core.getInput('release-tags').split(' ') : []
+  const cmd = typeof core.getInput('build-cmd') === 'string' ? core.getInput('build-cmd') : ''
 
   const commitMessage = core.getInput('commit-message', { required: true })
 
   await configureGit()
   await installNcc()
   await installDependencies()
-  const builtFiles = await buildAction()
+  const builtFiles = await buildAction(cmd)
   clean(builtFiles)
   await push(releaseBranch, tags, commitMessage)
 }

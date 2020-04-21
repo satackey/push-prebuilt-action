@@ -6,10 +6,35 @@ branding:
   color: white
 
 inputs:
+  committer-name:
+    description: The name to set as git user.name
+    required: false
+    default: github-actions
+  committer-email:
+    description: The email to set as git user.email
+    required: false
+    default: actions@github.com
+
+  docker-registry:
+    description: The server URL of the Docker registry.
+    required: false
+    default: docker.pkg.github.com
+  docker-tag:
+    description: The Docker registry's repository of push action image
+    required: false
+    default: docker.pkg.github.com/${{ github.repository }}/github-action-image:${{ github.sha }}
+  docker-user:
+    description: The username to login to the Docker registry
+    required: false
+    default: ${{ github.event.repository.owner.login }}
+  docker-token:
+    description: The token to login to the Docker registry
+    required: false
+    default: ${{ github.token }}
+
   push-branch:
     description: The name of branch to push compiled file.
-    required: true
-
+    required: false
   release-tags:
     description: The names to tag the compiled file commit.
     required: false
