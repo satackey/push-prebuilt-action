@@ -46,7 +46,7 @@ describe('ActionBuilderBaseMock', () => {
   })
 
   describe('configureGit', () => {
-    it('should configure username and email of local gitconfig ', async () => {
+    it('should set git username and email locally', async () => {
       await exec('git init', { cwd })
 
       const actionBuilder = new ActionBuilderBaseMock(standardActionConfig, standardConfigGetters, cwd)

@@ -63,7 +63,7 @@ export class ActionBuilderBase {
     this.validatePersonalConfig(configGetters)
   }
 
-  protected validatePersonalConfig(configGetters: BuilderConfigGetters) {
+  protected validatePersonalConfig(_: BuilderConfigGetters) {
     throw new Error('subclass responsibility')
   }
 
@@ -91,7 +91,7 @@ export class ActionBuilderBase {
   }
 
   async exists(aPath: string): Promise<boolean> {
-    const absolutePath = aPath.startsWith('/') ? aPath : `${this.workdir}/${aPath}`
+    const absolutePath = this.resolveAbsoluteFor(aPath)
 
     try {
       await fs.stat(absolutePath)
