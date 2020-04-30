@@ -7,7 +7,7 @@
   "author": "satackey <21271711+satackey@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.3",
+    "@actions/core": "^1.2.4",
     "actions-exec-listener": "^0.0.1",
     "js-yaml": "^3.13.1",
     "rimraf": "^3.0.2"
