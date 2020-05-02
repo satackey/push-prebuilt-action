@@ -13,12 +13,10 @@ with less time for pushes during action development and pulls during CI executio
 
 ## Example (short ver.)
 ```yaml
-    - # To use latest action, specify "release-master" instead of "v0.0.2"
-      uses: satackey/push-js-action@v0.0.2
+    - # To use latest action, specify "release-master" instead of "v0.0.4"
+      uses: satackey/push-prebuilt-action@v0.0.4
       with:
         push-branch: release-YOUR_BRANCH_NAME
-        # [optional] The commit can be tagged as follows
-        # release-tags: v1 v1.0 v1.0.0
 ```
 
 An automatic Docker builder is under development. Coming soon!
@@ -39,7 +37,7 @@ An automatic Docker builder is under development. Coming soon!
 - `release-tags` optional  
     The names to tag the compiled file commit.
 
-- `commit-message` optional  
+- `commit-message` optional, default: `[auto]`  
     The commit message for the compiled.
 
 ## Contribution
@@ -76,12 +74,15 @@ jobs:
         echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Push
-      # To use latest action, specify "release-master" instead of "v0.0.2"
-      uses: satackey/push-js-action@v0.0.2
+      # To use latest action, specify "release-master" instead of "v0.0.4"
+      uses: satackey/push-prebuilt-action@v0.0.4
       with:
         push-branch: release-${{ steps.name.outputs.branch }}
-        # The commit can be tagged as follows
+        # [optional] The commit can be tagged.
         # release-tags: v1 v1.0 v1.0.0
+        # [optional] You can change he commit message.
+        # commit-message: |
+        #   It can also be a multi-line commit message.
 ```
 
 The distribution is pushed into `release-<your_branch>` like `release-master`.
