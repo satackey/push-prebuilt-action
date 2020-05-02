@@ -1,24 +1,19 @@
 name: Push pre-built JavaScript GitHub Action
 description: There is no need to commit node_modules.
-
 branding:
   icon: git-branch
   color: white
-
 inputs:
   push-branch:
     description: The name of branch to push compiled file.
     required: true
-
   release-tags:
     description: The names to tag the compiled file commit.
     required: false
-
   commit-message:
     description: The commit message for the compiled.
     required: true
     default: '[auto]'
-
 runs:
   using: node12
-  main: index.js
+  main: dist/index.js
