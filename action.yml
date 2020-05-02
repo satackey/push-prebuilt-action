@@ -6,12 +6,18 @@ branding:
   color: white
 
 inputs:
-  release-branch:
+  push-branch:
     description: The name of branch to push compiled file.
     required: true
+
   release-tags:
     description: The names to tag the compiled file commit.
     required: false
+
+  commit-message:
+    description: The commit message for the compiled.
+    required: true
+    default: '[auto]'
 
 runs:
   using: node12

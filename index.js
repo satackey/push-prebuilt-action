@@ -157,11 +157,11 @@ const clean = (...excludePaths) => {
   core.endGroup()
 }
 
-const push = async (branch, tags) => {
+const push = async (branch, tags, message) => {
   core.startGroup('git')
   await exec.exec('git checkout -b ', [branch])
   await exec.exec('git add .')
-  await exec.exec('git commit -m [auto]')
+  await exec.exec('git commit -m', message)
   console.log(tags)
   if (tags.length > 0) {
     await exec.exec('git tag', tags)
@@ -181,12 +181,14 @@ const main = async () => {
   const tags = typeof core.getInput('release-tags') === 'string' && core.getInput('release-tags').length > 0
     ? core.getInput('release-tags').split(' ') : []
 
+  const commitMessage = core.getInput('commit-message', { required: true })
+
   await configureGit()
   await installNcc()
   await installDependencies()
   const builtFiles = await buildAction()
   clean(builtFiles)
-  await push(releaseBranch, tags)
+  await push(releaseBranch, tags, commitMessage)
 }
 
 main().catch(e => {
