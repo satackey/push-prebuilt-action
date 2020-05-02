@@ -39,6 +39,9 @@ An automatic Docker builder is under development. Coming soon!
 - `release-tags` optional  
     The names to tag the compiled file commit.
 
+- `commit-message` optional  
+    The commit message for the compiled.
+
 ## Contribution
 PRs are accepted.
 
