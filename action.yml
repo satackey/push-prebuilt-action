@@ -46,4 +46,5 @@ inputs:
 
 runs:
   using: node12
-  main: index.js
+  # to compile own
+  main: action-tswrapped.js
