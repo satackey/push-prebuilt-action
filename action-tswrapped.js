@@ -7,12 +7,13 @@ const run = () => new Promise((resolve, reject) => {
   tsNode.stderr.on('data', stderr => console.log(stderr.toString()))
   
   tsNode.on('close', (code) => {
+    console.log(`child process exited with code ${code}`)
+
     if (code === 0) {
       return resolve()
     }
 
-    console.log(`child process exited with code ${code}`)
-    reject()
+    reject(code)
   })
 })
 
