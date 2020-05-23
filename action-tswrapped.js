@@ -11,8 +11,8 @@ const run = () => new Promise((resolve, reject) => {
 
   const tsNode = spawn('yarn', ['ts-node', 'index.ts'], )
 
-  tsNode.stdout.on('data', console.log)
-  tsNode.stderr.on('data', console.error)
+  tsNode.stdout.on('data', stdout => console.log(stdout.toString()))
+  tsNode.stderr.on('data', stderr => console.log(stderr.toString()))
   
   tsNode.on('close', (code) => {
     if (code === 0) {
