@@ -1,7 +1,7 @@
 const { spawn } = require('child_process')
 
 const run = () => new Promise((resolve, reject) => {
-  const tsNode = spawn('yarn', ['ts-node', '-C ttypescript', 'index.ts'], )
+  const tsNode = spawn('yarn', ['ts-node', '-C', 'ttypescript', 'index.ts'], )
 
   tsNode.stdout.on('data', stdout => console.log(stdout.toString()))
   tsNode.stderr.on('data', stderr => console.log(stderr.toString()))
