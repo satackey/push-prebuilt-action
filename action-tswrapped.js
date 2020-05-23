@@ -1,14 +1,6 @@
 const { spawn } = require('child_process')
 
 const run = () => new Promise((resolve, reject) => {
-  // exec('yarn ts-node intex.ts', (error, stdout, stderr) => {
-  //   if (error) {
-  //     reject()
-  //   }
-  //   console.log(stdout)
-  //   console.error(stderr)
-  // })
-
   const tsNode = spawn('yarn', ['ts-node', 'index.ts'], )
 
   tsNode.stdout.on('data', stdout => console.log(stdout.toString()))
