@@ -2,7 +2,7 @@ const { spawn } = require('child_process')
 
 const run = () => new Promise((resolve, reject) => {
   const tsNode = spawn('yarn', ['ts-node', '-C', 'ttypescript', 'index.ts'], {
-    env: process.env
+    env: Object.create(process.env)
   })
 
   tsNode.stdout.on('data', stdout => console.log(stdout.toString()))
