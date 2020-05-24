@@ -17,8 +17,8 @@ const main = async () => {
       core.getInput('committer-email', { required: true })
     )
 
-    const pushBranch = core.getInput('push-branch', { required: true })
-    const releaseTags = core.getInput('release-tags', { required: true }).split(' ')
+    const pushBranch = core.getInput('push-branch')
+    const releaseTags = core.getInput('release-tags').split(' ')
     actionBuilder.commit(pushBranch, releaseTags, commitMessage)
     actionBuilder.push(core.getInput('force-push', { required: true }) === 'true')
   }
