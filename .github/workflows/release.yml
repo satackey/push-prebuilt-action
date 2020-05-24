@@ -31,3 +31,4 @@ jobs:
       uses: './.'
       with:
         push-branch: release-${{ steps.extract.outputs.branch }}
+        js-build-command: ncc build --v8-cache index.ts
