@@ -49,7 +49,7 @@ export class DockerActionBuilder extends ActionBuilderBase {
       cwd: this.workdir
     })
 
-    this.actionConfig.runs.image = repotag
+    this.actionConfig.runs.image = `docker://${repotag}`
   }
 
   async push(force: boolean) {
