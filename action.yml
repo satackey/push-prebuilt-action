@@ -22,7 +22,7 @@ inputs:
   excluded-from-cleanup: 
     description: Files/Dirs to leave for commit
     required: true
-    default: action.yml action.yaml dist
+    default: action.yml action.yaml dist .git
   force-push:
     description: Whether to force push to branch or tags. Either 'true' or 'false' 
     required: true

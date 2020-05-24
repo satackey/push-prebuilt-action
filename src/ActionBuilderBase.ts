@@ -137,7 +137,7 @@ export class ActionBuilderBase {
 
     // required at least 1 item in the argument.
     await Promise.all([Promise.resolve(), ...Array.from(unnecessaryItems.values()).map(async req =>
-      await fs.rmdir(req)
+      await fs.rmdir(req, { recursive: true })
     )])
   }
 
