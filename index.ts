@@ -9,6 +9,7 @@ const main = async () => {
 
   await actionBuilder.build()
   await actionBuilder.saveActionConfig()
+  await actionBuilder.cleanUp(core.getInput('excluded-from-cleanup', { required: true }).split(' '))
 
   const commitMessage = core.getInput('commit-message')
   if (commitMessage !== '') {

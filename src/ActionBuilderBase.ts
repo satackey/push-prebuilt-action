@@ -61,7 +61,7 @@ export class ActionBuilderBase {
   }
 
   // setGitCommitSetting checks configs are ready to commit and saves them.
-  assertCommitArgs(branch: string, tags: string[], message: string) {
+  private assertCommitArgs(branch: string, tags: string[], message: string) {
     // Execlude empty tag
     const invalidTags = tags.filter(tag => tag === '')
     if (invalidTags.length !== 0) {
@@ -112,6 +112,33 @@ export class ActionBuilderBase {
     }
 
     await this.saveActionConfigAs(this.actionConfigPath)
+  }
+
+  async cleanUp(requiredItems: string[]) {
+    if (requiredItems.length > 0) {
+      new Error('Specify the required files/dirs to clean up.')
+    }
+
+    if (requiredItems.filter(name => name === '').length > 0) {
+      new Error('There is empty item in required dirs/files')
+    }
+
+    if (requiredItems.find(req => req === '.') && requiredItems.length > 1) {
+      new Error('Cannot specify other dirs/files when you specified current dir.')
+    }
+
+    if (requiredItems[0] === '.') {
+      console.log('There is no unnecessary files.')
+      return
+    }
+
+    const unnecessaryItems = new Set(await fs.readdir(this.workdir))
+    requiredItems.forEach(req => unnecessaryItems.delete(req))
+
+    // required at least 1 item in the argument.
+    await Promise.all([Promise.resolve(), ...Array.from(unnecessaryItems.values()).map(async req =>
+      await fs.rmdir(req)
+    )])
   }
 
   async commit(branch: string, tags: string[], message: string) {

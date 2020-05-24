@@ -19,6 +19,10 @@ inputs:
     required: true
     default: '[auto]'
 
+  excluded-from-cleanup: 
+    description: Files/Dirs to leave for commit
+    required: true
+    default: action.yml action.yaml dist
   force-push:
     description: Whether to force push to branch or tags. Either 'true' or 'false' 
     required: true
