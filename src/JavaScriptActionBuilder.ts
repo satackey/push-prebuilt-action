@@ -1,8 +1,6 @@
-import { promises as fs } from 'fs'
-import { execSync } from 'child_process'
-import * as yaml from 'js-yaml'
 import core from '@actions/core'
 import exec from 'actions-exec-listener'
+import format from 'string-format'
 
 import { ActionBuilderBase, BuilderConfigGetters } from './ActionBuilderBase'
 
@@ -12,19 +10,18 @@ import {
 } from './ActionConfig'
 
 // https://stackoverflow.com/a/44688997
-type nonEmptyString = never; // Cannot be implicitly cast to
+type nonEmptyString = never & string; // Cannot be implicitly cast to
 function isNonEmptyString(str: string): str is nonEmptyString {
-    return str && str.length > 0; // Or any other logic, removing whitespace, etc.
+    return !!str && str.length > 0; // Or any other logic, removing whitespace, etc.
 }
 
 export class JavaScriptActionBuilder extends ActionBuilderBase {
-  yamlConfig: JavaScriptActionConfig
-  buildCommand: string
+  actionConfig: JavaScriptActionConfig
 
-  protected validatePersonalConfig(configGetters: BuilderConfigGetters) {
-    assertIsJavaScriptActionConfig(this.yamlConfig)
-
-    this.buildCommand = configGetters.getJavaScriptBuildCommand(true)
+  constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
+    super(yamlConfig, workdir)
+    assertIsJavaScriptActionConfig(yamlConfig)
+    this.actionConfig = yamlConfig
   }
 
   private async installNcc() {
@@ -61,9 +58,17 @@ export class JavaScriptActionBuilder extends ActionBuilderBase {
     core.endGroup()
   }
 
+  private async installDependenciesIfNotInstalled() {
+    if (await this.exists(this.resolveAbsoluteFor(`${this.workdir}/node_modules`))) {
+      console.log(`info: node_modules found. skipping install dependencies.`)
+      return
+    }
+    await this.installDependencies()
+  }
 
-  async installDependencies() {
-    const log = (file, pkg, level='info') => console.log(`${level}: ${file} found. Install dependencies with ${pkg}.`)
+
+  private async installDependencies() {
+    const log = (file: string, pkg: string, level='info') => console.log(`${level}: ${file} found. Install dependencies with ${pkg}.`)
 
     switch (await this.getInstallManager()) {
       case 'duplicate':
@@ -86,8 +91,17 @@ export class JavaScriptActionBuilder extends ActionBuilderBase {
 
   async build() {
     await this.installNcc()
-    await this.installDependencies()
-    await exec.exec(this.buildCommand)
-    this.yamlConfig.runs.main = 'dist/index.js'
+    await this.installDependenciesIfNotInstalled()
+
+    const unformattedBuildCommand = this.configGetters.getJavaScriptBuildCommand(true)
+    const formattedBuildCommand = format(unformattedBuildCommand, {
+      main: this.actionConfig.runs.main
+    })
+
+    await exec.exec(formattedBuildCommand, [], {
+      cwd: this.workdir
+    })
+
+    this.actionConfig.runs.main = 'dist/index.js'
   }
 }

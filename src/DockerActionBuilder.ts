@@ -1,35 +1,37 @@
 import exec from 'actions-exec-listener'
+import format from 'string-format'
 
 import {
   ActionBuilderBase,
   BuilderConfigGetters,
 } from './ActionBuilderBase'
 import {
+  ActionConfig,
   DockerActionConfig,
   assertIsDockerActionConfig,
 } from './ActionConfig'
 
 export class DockerActionBuilder extends ActionBuilderBase {
-  yamlConfig: DockerActionConfig
-  imageTag: string
+  actionConfig: DockerActionConfig
 
-  protected async validatePersonalConfig(configGetters: BuilderConfigGetters) {
-    // Check if action.yml is using Docker.
-    assertIsDockerActionConfig(this.yamlConfig)
+  constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
+    super(yamlConfig, workdir)
+    assertIsDockerActionConfig(yamlConfig)
+    this.actionConfig = yamlConfig
+  }
 
-    this.imageTag = configGetters.getDockerImageTag(true)
-
-    const registry = configGetters.getDockerRegistry(false)
+  private async loginToDockerRegistry() {
+    const registry = this.configGetters.getDockerRegistry(false)
 
     // If registry is empty, don't login.
     if (registry === '') {
       console.log('Skip docker login because no Docker registry is specified.')
       return
     }
-  
+
     // Get username and token, and run login command
-    const user = configGetters.getDockerLoginUser(true)
-    const token = configGetters.getDockerLoginToken(true)
+    const user = this.configGetters.getDockerLoginUser(true)
+    const token = this.configGetters.getDockerLoginToken(true)
 
     await exec.exec('docker login', [
       registry,
@@ -39,13 +41,25 @@ export class DockerActionBuilder extends ActionBuilderBase {
   }
 
   async build() {
-    await exec.exec('docker build -t', [this.imageTag, '.'])
-    this.yamlConfig.runs.image = this.imageTag
+    const repotag = this.configGetters.getDockerImageRepoTag(true)
+
+    const unformattedBuildCommand = this.configGetters.getJavaScriptBuildCommand(true)
+    const formattedBuildCommand = format(unformattedBuildCommand, {
+      repotag,
+    })
+
+    await exec.exec(formattedBuildCommand, [], {
+      cwd: this.workdir
+    })
+
+    this.actionConfig.runs.image = repotag
   }
 
   async push(force: boolean) {
+    await this.loginToDockerRegistry()
+
     // docker push
-    await exec.exec('docker push', [this.imageTag])
+    await exec.exec('docker push', [this.actionConfig.runs.image])
 
     // git push
     super.push(force)

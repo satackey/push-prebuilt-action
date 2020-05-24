@@ -14,67 +14,55 @@ import {
 export type Getter = (required: boolean) => string
 
 export interface BuilderConfigGetters {
-  getGitCommitterName: Getter
-  getGitCommitterEmail: Getter
-  getGitCommitMessage: Getter
-  getGitPushBranch: Getter
-  getGitPushTags: Getter
   getJavaScriptBuildCommand: Getter
+  getDockerRegistry: Getter
   getDockerLoginUser: Getter
   getDockerLoginToken: Getter
-  getDockerImageTag: Getter
-  getDockerRegistry: Getter
+  getDockerImageRepoTag: Getter
+  getDockerBuildCommand: Getter
+}
+
+const defaultGetter: Getter = (required) => {
+  if (required) {
+    throw new Error('This is default getter.')
+  }
+  return ''
+}
+export const defaultConfigGetters: BuilderConfigGetters = {
+  getJavaScriptBuildCommand: defaultGetter,
+  getDockerRegistry: defaultGetter,
+  getDockerLoginUser: defaultGetter,
+  getDockerLoginToken: defaultGetter,
+  getDockerImageRepoTag: defaultGetter,
+  getDockerBuildCommand: defaultGetter,
 }
 
 export class ActionBuilderBase {
   readonly workdir: string
 
-  // user: string // = core.getInput('user', { required: true })
-  // token: string // = core.getInput('token', { required: true })
+  readonly actionConfig: ActionConfig
+  actionConfigPath: string = ''
 
-  // gitUserName: string = 'github-actions'
-  // gitUserEmail: string = 'actions@github.com'
+  configGetters: BuilderConfigGetters
 
-  readonly yamlConfig: ActionConfig
-
-  protected branch: string = ''
-  protected tags: string[] = []
-
-  constructor(yamlConfig: ActionConfig, configGetters: BuilderConfigGetters, workdir=process.cwd()): Promise<ActionBuilderBase> {
-    this.yamlConfig = Object.assign({}, yamlConfig)
+  constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
+    this.actionConfig = Object.assign({}, yamlConfig)
     this.workdir = workdir
-    // this.validateConfig(configGetters)
-    return Promise.resolve(this)
+    this.configGetters = defaultConfigGetters
   }
 
   configure(configGetters: BuilderConfigGetters) {
-    this.validateConfig(configGetters)
-  }
-
-  private async validateConfig(configGetters: BuilderConfigGetters) {
-    const name = configGetters.getGitCommitterName(true)
-    const email = configGetters.getGitCommitterEmail(true)
-    this.configureGit(name, email)
-
-    const branch = configGetters.getGitPushBranch(false)
-    const tags = configGetters.getGitPushTags(false).split(' ')
-    this.setGitCommitSetting(branch, tags)
-
-    this.validatePersonalConfig(configGetters)
-  }
-
-  protected validatePersonalConfig(_: BuilderConfigGetters) {
-    throw new Error('subclass responsibility')
+    this.configGetters = configGetters
   }
 
   async configureGit(name: string, email: string) {
-    const options: ExecOptions = { cwd: this.workdir }
+    const options = { cwd: this.workdir }
     await exec.exec('git config --local user.name', [name], options)
     await exec.exec('git config --local user.email', [email], options)
   }
 
-  // Check config is ready to commit.
-  setGitCommitSetting(branch: string, tags: string[]) {
+  // setGitCommitSetting checks configs are ready to commit and saves them.
+  assertCommitArgs(branch: string, tags: string[], message: string) {
     // Execlude empty tag
     const invalidTags = tags.filter(tag => tag === '')
     if (invalidTags.length !== 0) {
@@ -86,8 +74,9 @@ export class ActionBuilderBase {
       throw new Error('Either branch or tags must be specified to commit.')
     }
 
-    this.branch = branch
-    this.tags = tags
+    if (message === '') {
+      throw new Error('Commit message must be specified.')
+    }
   }
 
   async exists(aPath: string): Promise<boolean> {
@@ -113,12 +102,25 @@ export class ActionBuilderBase {
     throw new Error('subclass responsibility')
   }
 
-  async saveActionConfig(saveYamlAs: string) {
-    const yamlText = yaml.safeDump(this.yamlConfig)
-    await fs.writeFile(saveYamlAs, yamlText, 'utf8')
+  protected async saveActionConfigAs(filename: string) {
+    const yamlText = yaml.safeDump(this.actionConfig)
+    await fs.writeFile(filename, yamlText, 'utf8')
   }
 
-  async commit(branch: string, tags: string[]) {
+  async saveActionConfig() {
+    if (this.actionConfigPath === '') {
+      throw new Error('actionConfigPath must be specified.')
+    }
+
+    await this.saveActionConfigAs(this.actionConfigPath)
+  }
+
+  async commit(branch: string, tags: string[], message: string) {
+    this.assertCommitArgs(branch, tags, message)
+    await this.commitWithoutCheckingArgs(branch, tags, message)
+  }
+
+  protected async commitWithoutCheckingArgs(branch: string, tags: string[], message: string) {
     if (branch === '') {
       // If branch is not specified, checkout detached HEAD.
       await exec.exec('git checkout --detach HEAD')
@@ -129,7 +131,7 @@ export class ActionBuilderBase {
 
     // Commit
     await exec.exec('git add .')
-    await exec.exec('git commit -m [auto]')
+    await exec.exec('git commit -m', [message])
 
     // If some tags are specified, tag commit.
     if (tags.length > 0) {
@@ -139,9 +141,9 @@ export class ActionBuilderBase {
 
   async push(force: boolean) {
     // base command
-    let command = 'git push'
+    let command = 'git push origin'
 
-    // if force option true, add git force argument: -f
+    // if force option is true, add git force argument: -f
     if (force) {
       command = `${command} -f`
     }
@@ -151,13 +153,6 @@ export class ActionBuilderBase {
     // args = this.tags.length === 0 ? [] : this.tags
     const args = this.tags
 
-    if (this.branch !== '') {
-      command = `${command} -u origin`
-      args.unshift(this.branch)
-    } else if (this.tags.length !== 0) {
-      command = `${command} origin`
-    }
-
     // yield `${command} ${args.join(' ')}`
     await exec.exec(command, args)
   }
@@ -165,7 +160,7 @@ export class ActionBuilderBase {
 
 // A mock for test
 export class ActionBuilderBaseMock extends ActionBuilderBase {
-  protected validatePersonalConfig(configGetters: BuilderConfigGetters) {
+  protected validatePersonalConfig(_: BuilderConfigGetters) {
     console.log('Since this instance is the mock, skipping run validatePersonalConfig.')
   }
 }
