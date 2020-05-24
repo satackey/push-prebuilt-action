@@ -4,7 +4,7 @@ const run = () => new Promise((resolve, reject) => {
   console.log(process.env)
 
   const tsNode = spawn('yarn', ['ts-node', '-C', 'ttypescript', 'index.ts'], {
-    env: Object.create(process.env)
+    env: Object.assign(process.env)
   })
 
   tsNode.stdout.on('data', stdout => console.log(stdout.toString()))
