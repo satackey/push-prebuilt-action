@@ -56,7 +56,7 @@ export class DockerActionBuilder extends ActionBuilderBase {
     await this.loginToDockerRegistry()
 
     // docker push
-    await exec.exec('docker push', [this.actionConfig.runs.image])
+    await exec.exec('docker push', [this.actionConfig.runs.image.replace('docker://', '')])
 
     // git push
     super.push(force)
