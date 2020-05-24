@@ -28,7 +28,7 @@ jobs:
         echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Compile
-      run: yarn ttsc
+      run: yarn run pack
 
     - name: Release
       uses: './.'
