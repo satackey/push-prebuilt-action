@@ -1,13 +1,9 @@
 import { promises as fs } from 'fs'
-import { execSync } from 'child_process'
 import * as yaml from 'js-yaml'
-import core from '@actions/core'
 import exec from 'actions-exec-listener'
-import { ExecOptions } from '@actions/exec/lib/interfaces'
 
 import {
   ActionConfig,
-  assertIsActionConfig,
 } from './ActionConfig'
 
 

@@ -1,4 +1,4 @@
-import core from '@actions/core'
+import * as core from '@actions/core'
 
 import { createBuilder } from './src/CreateActionBuilder'
 import { BuilderConfigGetters } from './src/ActionBuilderBase'
