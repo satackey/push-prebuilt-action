@@ -12,15 +12,15 @@ const main = async () => {
 
   const commitMessage = core.getInput('commit-message')
   if (commitMessage !== '') {
-    actionBuilder.configureGit(
+    await actionBuilder.configureGit(
       core.getInput('committer-name', { required: true }),
       core.getInput('committer-email', { required: true })
     )
 
     const pushBranch = core.getInput('push-branch')
-    const releaseTags = core.getInput('release-tags').split(' ')
-    actionBuilder.commit(pushBranch, releaseTags, commitMessage)
-    actionBuilder.push(core.getInput('force-push', { required: true }) === 'true')
+    const releaseTags = core.getInput('release-tags').split(' ').filter(tag => tag !== '')
+    await actionBuilder.commit(pushBranch, releaseTags, commitMessage)
+    await actionBuilder.push(core.getInput('force-push', { required: true }) === 'true')
   }
 }
 
