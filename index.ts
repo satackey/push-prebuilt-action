@@ -7,10 +7,10 @@ const main = async () => {
   const configGetters = createConfigGetters()
   const actionBuilder = await createBuilder(process.cwd(), configGetters)
 
+  console.log(process.env)
+
   await actionBuilder.build()
   await actionBuilder.saveActionConfig()
-
-  console.log(process.env)
 
   const commitMessage = core.getInput('commit-message')
   if (commitMessage !== '') {
