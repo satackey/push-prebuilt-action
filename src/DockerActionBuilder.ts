@@ -40,7 +40,7 @@ export class DockerActionBuilder extends ActionBuilderBase {
   async build() {
     const repotag = this.configGetters.getDockerImageRepoTag(true)
 
-    const unformattedBuildCommand = this.configGetters.getJavaScriptBuildCommand(true)
+    const unformattedBuildCommand = this.configGetters.getDockerBuildCommand(true)
     const formattedBuildCommand = format(unformattedBuildCommand, {
       repotag,
     })
