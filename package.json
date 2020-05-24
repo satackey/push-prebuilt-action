@@ -9,7 +9,7 @@
   "dependencies": {
     "@actions/core": "^1.2.4",
     "actions-exec-listener": "^0.0.1",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^3.14.0",
     "rimraf": "^3.0.2"
   }
 }
