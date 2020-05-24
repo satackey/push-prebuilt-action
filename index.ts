@@ -10,6 +10,8 @@ const main = async () => {
   await actionBuilder.build()
   await actionBuilder.saveActionConfig()
 
+  console.log(process.env)
+
   const commitMessage = core.getInput('commit-message')
   if (commitMessage !== '') {
     actionBuilder.configureGit(
