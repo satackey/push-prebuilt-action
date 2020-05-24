@@ -45,6 +45,9 @@ export class ActionBuilderBase {
 
   configGetters: BuilderConfigGetters
 
+  private branch = ''
+  private tags: string[] = []
+
   constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
     this.actionConfig = Object.assign({}, yamlConfig)
     this.workdir = workdir
@@ -127,6 +130,7 @@ export class ActionBuilderBase {
     } else {
       // Create branch by specified name.
       await exec.exec('git checkout -b', [branch])
+      this.branch = branch
     }
 
     // Commit
@@ -136,6 +140,7 @@ export class ActionBuilderBase {
     // If some tags are specified, tag commit.
     if (tags.length > 0) {
       await exec.exec('git tag', tags)
+      this.tags = tags
     }
   }
 
@@ -151,7 +156,7 @@ export class ActionBuilderBase {
     // If there is one or more tags, use it.
     // Overwise, args will be empty.
     // args = this.tags.length === 0 ? [] : this.tags
-    const args = this.tags
+    const args = [this.branch, ...this.tags].filter(arg => arg !== '')
 
     // yield `${command} ${args.join(' ')}`
     await exec.exec(command, args)
