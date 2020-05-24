@@ -7,43 +7,47 @@ branding:
 
 inputs:
   committer-name:
-    description: The name to set as git user.name
+    description: The name to set as git `user.name`.
     required: false
     default: github-actions
   committer-email:
-    description: The email to set as git user.email
+    description: The email to set as git `user.email`.
     required: false
     default: actions@github.com
   commit-message:
-    description: The commit message for the compiled. Leave blank to avoid committing and pushing.
+    description: >
+      The commit message for the compiled.
+      Leave blank to avoid committing and pushing.
     required: true
     default: '[auto]'
 
-  excluded-from-cleanup: 
-    description: Files/Dirs to leave for commit
+  exclude-from-cleanup: 
+    description: Files/Dirs to leave for commit.
     required: true
     default: action.yml action.yaml dist .git
   force-push:
-    description: Whether to force push to branch or tags. Either 'true' or 'false' 
+    description: >
+      Whether to force push to branch or tags.
+      Either 'true' or 'false'.
     required: true
     default: 'true'
 
   docker-registry:
     description: The server URL of the Docker registry.
     required: false
-    default: docker.pkg.github.com
+    # default: docker.pkg.github.io
   docker-repotag:
     description: The Docker registry's repository of push action image.
     required: false
-    default: docker.pkg.github.com/${{ github.repository }}/github-action-image:${{ github.sha }}
+    # default: docker.pkg.github.com/${{ github.repository }}/github-action-image:${{ github.sha }}
   docker-user:
     description: The username to login to the Docker registry.
     required: false
-    default: x-access-token # https://github.com/actions/checkout/blob/01aecccf739ca6ff86c0539fbc67a7a5007bbc81/src/git-auth-helper.ts#L57
+    # default: x-access-token # https://github.com/actions/checkout/blob/01aecccf739ca6ff86c0539fbc67a7a5007bbc81/src/git-auth-helper.ts#L57
   docker-token:
     description: The token to login to the Docker registry.
     required: false
-    default: ${{ github.token }}
+    # default: ${{ github.token }}
   docker-build-command:
     description: The command and arguments to build Docker image.
     required: false
@@ -52,7 +56,7 @@ inputs:
   js-build-command:
     description: >
       The command and arguments to build JavaScript or TypeScript files.
-      Artifacts must be in the dist directory and entrypoint must be index.js.
+      The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
     required: false
     default: ncc build --v8-cache {main}
 
