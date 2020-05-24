@@ -66,4 +66,4 @@ inputs:
 runs:
   using: node12
   # to compile own
-  main: action-tswrapped.js
+  main: ts-dist/index.js
