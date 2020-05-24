@@ -1,7 +1,7 @@
 const { spawn } = require('child_process')
 
 const run = () => new Promise((resolve, reject) => {
-  console.log(Object.create(process.env))
+  console.log(process.env)
 
   const tsNode = spawn('yarn', ['ts-node', '-C', 'ttypescript', 'index.ts'], {
     env: Object.create(process.env)
