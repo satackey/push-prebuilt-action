@@ -25,16 +25,14 @@ const main = async () => {
   }
 }
 
-const createConfigGetters = (): BuilderConfigGetters => {
-  return {
-    getJavaScriptBuildCommand: (required: boolean) => core.getInput(`js-build-command`, { required }),
-    getDockerRegistry: (required: boolean) => core.getInput(`docker-registry`, { required }),
-    getDockerLoginUser: (required: boolean) => core.getInput(`docker-user`, { required }),
-    getDockerLoginToken: (required: boolean) => core.getInput(`docker-token`, { required }),
-    getDockerImageRepoTag: (required: boolean) => core.getInput(`docker-repotag`, { required }),
-    getDockerBuildCommand: (required: boolean) => core.getInput(`docker-build-command`, { required }),
-  }
-}
+const createConfigGetters = (): BuilderConfigGetters => ({
+  getJavaScriptBuildCommand: (required: boolean) => core.getInput(`js-build-command`, { required }),
+  getDockerRegistry: (required: boolean) => core.getInput(`docker-registry`, { required }),
+  getDockerLoginUser: (required: boolean) => core.getInput(`docker-user`, { required }),
+  getDockerLoginToken: (required: boolean) => core.getInput(`docker-token`, { required }),
+  getDockerImageRepoTag: (required: boolean) => core.getInput(`docker-repotag`, { required }),
+  getDockerBuildCommand: (required: boolean) => core.getInput(`docker-build-command`, { required }),
+})
 
 main().catch(e => {
   console.error(e)
