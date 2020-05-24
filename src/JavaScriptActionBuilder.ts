@@ -2,11 +2,12 @@ import core from '@actions/core'
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilderBase, BuilderConfigGetters } from './ActionBuilderBase'
+import { ActionBuilderBase } from './ActionBuilderBase'
 
 import {
-  DockerActionConfig, JavaScriptActionConfig,
-  assertIsActionConfig, assertIsDockerActionConfig, assertIsJavaScriptActionConfig, ActionConfig
+  ActionConfig,
+  JavaScriptActionConfig,
+  assertIsJavaScriptActionConfig,
 } from './ActionConfig'
 
 // https://stackoverflow.com/a/44688997
