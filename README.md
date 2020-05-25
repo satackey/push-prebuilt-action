@@ -39,6 +39,8 @@ The description `action.yml` can be read as `action.yaml`.
         push-branch: release-master
 ```
 
+[Click here](#javascript--typescript-action-example) to see workflow example
+
 #### Basic inputs
 <!-- COMMON DESCRIPTION -->
 - `push-branch` **Required**  
@@ -53,6 +55,7 @@ The description `action.yml` can be read as `action.yaml`.
     The commit message for the compiled.
 
 #### Basic flow
+1. This action detects that your action is a JS/TS action by `action.yml`
 1. This action compiles a file (e.g. `index.js`) specified in `action.yml#runs.main` into `dist/index.js`
 1. Replaces the value of `runs.main` with `dist/index.js`.
 1. Remove files exclude `/action.yml` and `dist/*`.
@@ -97,10 +100,20 @@ The description `action.yml` can be read as `action.yaml`.
         docker-registry: docker.io
         docker-user: <your_dockerhub_username>
         docker-token: <your_dockerhub_access_token>
-        docker-tag: <your_repo>:${{ github.sha }}
+        docker-repotag: <your_repo>:${{ github.sha }}
 ```
 
+[Click here](#docker-container-action-example) to see workflow example
+
 #### Basic flow
+1. This action detects that your action is a Docker container action by `action.yml`
+1. This action builds the Dockerfile specifed in `action.yml#runs.image`
+1. Replaces the value of `runs.image` with `docker://<docker-repotag>`.
+1. Remove files exclude `/action.yml`.
+1. Checkout a new branch with the name specified in `push-branch`.
+1. Commit all changes.
+1. Push the Docker image `<docker-repotag>` to the Docker registry `<docker-registry>`.
+1. Force push new branch (and tags) to the `origin`
 
 #### Basic inputs
 <!-- COMMON DESCRIPTION -->
@@ -172,7 +185,7 @@ on:
 
 jobs:
   build_and_push:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Setup node.js
@@ -188,7 +201,7 @@ jobs:
       run: echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Push
-      uses: satackey/push-prebuilt-action@v0.0.4
+      uses: satackey/push-prebuilt-action@v0.1
       with:
         push-branch: release-${{ steps.name.outputs.branch }}
         # [optional] The commit can be tagged.
@@ -211,7 +224,7 @@ on:
 
 jobs:
   build_and_push:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -222,7 +235,7 @@ jobs:
       run: echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Push
-      uses: satackey/push-prebuilt-action@v0.0.4
+      uses: satackey/push-prebuilt-action@v0.1
       with:
         push-branch: release-${{ steps.name.outputs.branch }}
         # [optional] The commit can be tagged.
@@ -231,8 +244,8 @@ jobs:
         # commit-message: '[ci skip]'
         docker-registry: docker.io
         docker-user: <your_dockerhub_username>
-        docker-token: <your_dockerhub_access_token>
-        docker-tag: <your_repo>:${{ github.sha }}
+        docker-token: ${{ secrets.DOCKERHUB_TOKEN }} # your dockerhub access token
+        docker-repotag: <your_repo>:${{ github.sha }}
 ```
 
 The distribution is pushed into `release-<your_branch>` like `release-master`.
