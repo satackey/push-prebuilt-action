@@ -74,7 +74,7 @@ The description `action.yml` can be read as `action.yaml`.
 <!-- COMMON DESCRIPTION -->
 - `execlude-from-cleanup` Required  
     default: `action.yml action.yaml dist .git`  
-    Files/Dirs to leave for commit.
+    Files/dirs to leave for commit.
 
 <!-- COMMON DESCRIPTION -->
 - `force-push` Required  
@@ -141,7 +141,7 @@ The description `action.yml` can be read as `action.yaml`.
 <!-- COMMON DESCRIPTION -->
 - `execlude-from-cleanup` Required  
     default: `action.yml action.yaml dist .git`  
-    Files/Dirs to leave for commit.
+    Files/dirs to leave for commit.
 
 <!-- COMMON DESCRIPTION -->
 - `force-push` Required  
