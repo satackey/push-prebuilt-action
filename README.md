@@ -195,10 +195,6 @@ jobs:
         # release-tags: v1 v1.0 v1.0.0
         # [optional] You can change he commit message.
         # commit-message: '[ci skip]'
-        docker-registry: docker.io
-        docker-user: <your_dockerhub_username>
-        docker-token: <your_dockerhub_access_token>
-        docker-tag: <your_repo>:${{ github.sha }}
 ```
 
 The distribution is pushed into `release-<your_branch>` like `release-master`.
@@ -233,7 +229,10 @@ jobs:
         # release-tags: v1 v1.0 v1.0.0
         # [optional] You can change he commit message.
         # commit-message: '[ci skip]'
-        docker-user
+        docker-registry: docker.io
+        docker-user: <your_dockerhub_username>
+        docker-token: <your_dockerhub_access_token>
+        docker-tag: <your_repo>:${{ github.sha }}
 ```
 
 The distribution is pushed into `release-<your_branch>` like `release-master`.
