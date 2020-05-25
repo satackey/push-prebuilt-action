@@ -65,27 +65,27 @@ The description `action.yml` can be read as `action.yaml`.
 
 #### Advanced configrations
 <!-- COMMON DESCRIPTION -->
-- `committer-name` Required  
+- `committer-name` **Required**  
     default: `github-actions`  
     The name to set as git `user.name`.
 
 <!-- COMMON DESCRIPTION -->
-- `committer-email` Required  
+- `committer-email` **Required**  
     default: `actions@github.com`  
     The email to set as git `user.email`.
 
 <!-- COMMON DESCRIPTION -->
-- `execlude-from-cleanup` Required  
+- `execlude-from-cleanup` **Required**  
     default: `action.yml action.yaml dist .git`  
     Files/dirs to leave for commit.
 
 <!-- COMMON DESCRIPTION -->
-- `force-push` Required  
+- `force-push` **Required**  
     default: `'true'`  
     Whether to force push to branch or tags.
     Either 'true' or 'false'.
 
-- `js-build-command` Required  
+- `js-build-command` **Required**  
     default: `ncc build --v8-cache {main}`  
     The command and arguments to build JavaScript or TypeScript files.
     The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
@@ -142,27 +142,27 @@ The description `action.yml` can be read as `action.yaml`.
 
 #### Advanced configrations
 <!-- COMMON DESCRIPTION -->
-- `committer-name` Required  
+- `committer-name` **Required**  
     default: `github-actions`  
     The name to set as git `user.name`.
 
 <!-- COMMON DESCRIPTION -->
-- `committer-email` Required  
+- `committer-email` **Required**  
     default: `actions@github.com`  
     The email to set as git `user.email`.
 
 <!-- COMMON DESCRIPTION -->
-- `execlude-from-cleanup` Required  
+- `execlude-from-cleanup` **Required**  
     default: `action.yml action.yaml dist .git`  
     Files/dirs to leave for commit.
 
 <!-- COMMON DESCRIPTION -->
-- `force-push` Required  
+- `force-push` **Required**  
     default: `'true'`  
     Whether to force push to branch or tags.
     Either 'true' or 'false'.
 
-- `docker-build-command` Required  
+- `docker-build-command` **Required**  
     default: `'true'`  
     The command and arguments to build Docker image.
 
