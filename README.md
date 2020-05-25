@@ -63,6 +63,10 @@ The description `action.yml` can be read as `action.yaml`.
     The commit message for the compiled.
 
 #### Advanced configrations
+
+<details>
+<summary>Click here to expand</summary>
+
 <!-- COMMON DESCRIPTION -->
 - `committer-name` **Required**  
     default: `github-actions`  
@@ -88,6 +92,8 @@ The description `action.yml` can be read as `action.yaml`.
     default: `ncc build --v8-cache {main}`  
     The command and arguments to build JavaScript or TypeScript files.
     The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
+</details>
+
 
 ### Docker container
 
@@ -140,6 +146,10 @@ The description `action.yml` can be read as `action.yaml`.
     The token to login to the Docker registry.
 
 #### Advanced configrations
+
+<details>
+<summary>Click here to expand</summary>
+
 <!-- COMMON DESCRIPTION -->
 - `committer-name` **Required**  
     default: `github-actions`  
@@ -164,6 +174,7 @@ The description `action.yml` can be read as `action.yaml`.
 - `docker-build-command` **Required**  
     default: `'true'`  
     The command and arguments to build Docker image.
+</details>
 
 ## Contribution
 PRs are accepted.
