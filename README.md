@@ -5,7 +5,7 @@ so you can reduce time of CI execution.
 
 ## What does this action do to make it pre-built?
 
-### JS / TS action
+### JavaScript / TypeScript action
 This action compiles JavaScript GitHub Action into a single file (with cache files if you want), and pushes it to GitHub.
 Compilation is powered by [zeit/ncc](https://github.com/zeit/ncc).
 
@@ -25,12 +25,12 @@ The job just pulls Docker image when using the action, and there's no time to bu
 
 ## Usage
 
-- [JavaScript / TypeScript action](#JavaScript+%2F+TypeScript+action)
-- [Docker container action](#Docker+container+action)
+- [JavaScript / TypeScript](#javascript--typescript)
+- [Docker container](#docker-container)
 
 The description `action.yml` can be read as `action.yaml`.
 
-### JavaScript / TypeScript action
+### JavaScript / TypeScript
 
 #### Example (Step only)
 ```yaml
@@ -80,7 +80,7 @@ The description `action.yml` can be read as `action.yaml`.
     The command and arguments to build JavaScript or TypeScript files.
     The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
 
-### Docker container action
+### Docker container
 
 #### Example (step only)
 ```yaml
