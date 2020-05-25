@@ -6,19 +6,67 @@ branding:
   color: white
 
 inputs:
-  push-branch:
-    description: The name of branch to push compiled file.
-    required: true
-
-  release-tags:
-    description: The names to tag the compiled file commit.
+  committer-name:
+    description: The name to set as git `user.name`.
     required: false
-
+    default: github-actions
+  committer-email:
+    description: The email to set as git `user.email`.
+    required: false
+    default: actions@github.com
   commit-message:
-    description: The commit message for the compiled.
+    description: >
+      The commit message for the compiled.
+      Leave blank to avoid committing and pushing.
     required: true
     default: '[auto]'
 
+  exclude-from-cleanup:
+    description: Files/dirs to leave for commit.
+    required: true
+    default: action.yml action.yaml dist .git
+
+  push-branch:
+    description: The name of branch to push compiled file.
+    required: false
+  release-tags:
+    description: The names to tag the compiled file commit.
+    required: false
+  force-push:
+    description: >
+      Whether to force push to branch or tags.
+      Either 'true' or 'false'.
+    required: true
+    default: 'true'
+
+  docker-registry:
+    description: The server URL of the Docker registry.
+    required: false
+    # default: docker.pkg.github.io
+  docker-repotag:
+    description: The Docker registry's repository of push action image.
+    required: false
+    # default: docker.pkg.github.com/${{ github.repository }}/github-action-image:${{ github.sha }}
+  docker-user:
+    description: The username to login to the Docker registry.
+    required: false
+    # default: x-access-token # https://github.com/actions/checkout/blob/01aecccf739ca6ff86c0539fbc67a7a5007bbc81/src/git-auth-helper.ts#L57
+  docker-token:
+    description: The token to login to the Docker registry.
+    required: false
+    # default: ${{ github.token }}
+  docker-build-command:
+    description: The command and arguments to build Docker image.
+    required: false
+    default: docker build -t {repotag} .
+
+  js-build-command:
+    description: >
+      The command and arguments to build JavaScript or TypeScript files.
+      The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
+    required: false
+    default: ncc build --v8-cache {main}
 runs:
   using: node12
-  main: index.js
+  # to compile own
+  main: dist/index.js

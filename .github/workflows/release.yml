@@ -27,7 +27,11 @@ jobs:
       run: |
         echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
+    - name: Compile
+      run: yarn run pack
+
     - name: Release
       uses: './.'
       with:
         push-branch: release-${{ steps.extract.outputs.branch }}
+        js-build-command: yarn run pack 
