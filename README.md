@@ -85,7 +85,7 @@ The description `action.yml` can be read as `action.yaml`.
     Whether to force push to branch or tags.
     Either 'true' or 'false'.
 
-- `js-build-command` Required
+- `js-build-command` Required  
     default: `ncc build --v8-cache {main}`  
     The command and arguments to build JavaScript or TypeScript files.
     The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
