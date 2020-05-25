@@ -8,7 +8,7 @@ This GitHub action reduces CI execution time by pre-building JavaScript, TypeScr
 This action compiles JavaScript GitHub Action into a single file (with cache files if you want), and pushes it to GitHub.
 Compilation is powered by [zeit/ncc](https://github.com/zeit/ncc).
 
-TypeScript is also supported. Specify your *.ts file to `action.yml#runs.main` (or `action.yaml`)
+TypeScript is also supported. Specify your *.ts file to `action.yml#runs.main`
 
 Since there is no need to commit `node_modules`, your GitHub Action can be released quickly
 with less time for pushes during action development and pulls during CI execution.
@@ -40,6 +40,15 @@ The description `action.yml` can be read as `action.yaml`.
 
 [Click here](#javascript--typescript-action-example) to see workflow example
 
+#### Basic flow
+1. This action detects that your action is a JS/TS action by `action.yml`
+1. This action compiles a file (e.g. `index.js`) specified in `action.yml#runs.main` into `dist/index.js`
+1. Replaces the value of `runs.main` with `dist/index.js`.
+1. Remove files exclude `/action.yml` and `dist/*`.
+1. Checkout a new branch with the name specified in `push-branch`.
+1. Commit all changes.
+1. Force push new branch (and tags) to the `origin`
+
 #### Basic inputs
 <!-- COMMON DESCRIPTION -->
 - `push-branch` **Required**  
@@ -52,15 +61,6 @@ The description `action.yml` can be read as `action.yaml`.
 <!-- COMMON DESCRIPTION -->
 - `commit-message` optional, default: `[auto]`  
     The commit message for the compiled.
-
-#### Basic flow
-1. This action detects that your action is a JS/TS action by `action.yml`
-1. This action compiles a file (e.g. `index.js`) specified in `action.yml#runs.main` into `dist/index.js`
-1. Replaces the value of `runs.main` with `dist/index.js`.
-1. Remove files exclude `/action.yml` and `dist/*`.
-1. Checkout a new branch with the name specified in `push-branch`.
-1. Commit all changes.
-1. Force push new branch (and tags) to the `origin`
 
 #### Advanced configrations
 <!-- COMMON DESCRIPTION -->
