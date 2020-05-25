@@ -61,19 +61,23 @@ The description `action.yml` can be read as `action.yaml`.
 1. Force push new branch (and tags) to the `origin`
 
 #### Advanced configrations
-- `committer-name` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `committer-name` Required  
     default: `github-actions`  
     The name to set as git `user.name`.
 
-- `committer-email` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `committer-email` Required  
     default: `actions@github.com`  
     The email to set as git `user.email`.
 
-- `execlude-from-cleanup` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `execlude-from-cleanup` Required  
     default: `action.yml action.yaml dist .git`  
     Files/Dirs to leave for commit.
 
-- `force-push` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `force-push` Required  
     default: `'true'`  
     Whether to force push to branch or tags.
     Either 'true' or 'false'.
