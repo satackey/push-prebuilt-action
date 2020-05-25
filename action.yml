@@ -1,5 +1,5 @@
-name: Push pre-built JavaScript GitHub Action
-description: There is no need to commit node_modules.
+name: Push pre-built JavaScript / TypeScript / Docker container GitHub Action
+description: Speed up CI execution time by pre-building.
 
 branding:
   icon: git-branch
