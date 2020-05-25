@@ -40,13 +40,16 @@ The description `action.yml` can be read as `action.yaml`.
 ```
 
 #### Basic inputs
-- `push-branch` **Required**  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `push-branch` **Required**  
     The name of branch to push compiled file.
 
-- `release-tags` optional  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `release-tags` optional  
     The names to tag the compiled file commit.
 
-- `commit-message` optional, default: `[auto]`  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `commit-message` optional, default: `[auto]`  
     The commit message for the compiled.
 
 #### Basic flow
@@ -96,13 +99,16 @@ The description `action.yml` can be read as `action.yaml`.
 #### Basic flow
 
 #### Basic inputs
-- `push-branch` **Required**  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `push-branch` **Required**  
     The name of branch to push compiled file.
 
-- `release-tags` optional  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `release-tags` optional  
     The names to tag the compiled file commit.
 
-- `commit-message` optional, default: `[auto]`  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `commit-message` optional, default: `[auto]`  
     The commit message for the compiled.
 
 - `docker-registry` **Required**  
@@ -118,20 +124,23 @@ The description `action.yml` can be read as `action.yaml`.
     The token to login to the Docker registry.
 
 #### Advanced configrations
-
-- `committer-name` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `committer-name` Required  
     default: `github-actions`  
     The name to set as git `user.name`.
 
-- `committer-email` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `committer-email` Required  
     default: `actions@github.com`  
     The email to set as git `user.email`.
 
-- `execlude-from-cleanup` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `execlude-from-cleanup` Required  
     default: `action.yml action.yaml dist .git`  
     Files/Dirs to leave for commit.
 
-- `force-push` Required  <!-- COMMON DESCRIPTION -->
+<!-- COMMON DESCRIPTION -->
+- `force-push` Required  
     default: `'true'`  
     Whether to force push to branch or tags.
     Either 'true' or 'false'.
