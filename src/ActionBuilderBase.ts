@@ -5,33 +5,7 @@ import exec from 'actions-exec-listener'
 import {
   ActionConfig,
 } from './ActionConfig'
-
-
-export type Getter = (required: boolean) => string
-
-export interface BuilderConfigGetters {
-  getJavaScriptBuildCommand: Getter
-  getDockerRegistry: Getter
-  getDockerLoginUser: Getter
-  getDockerLoginToken: Getter
-  getDockerImageRepoTag: Getter
-  getDockerBuildCommand: Getter
-}
-
-const defaultGetter: Getter = (required) => {
-  if (required) {
-    throw new Error('This is default getter.')
-  }
-  return ''
-}
-export const defaultConfigGetters: BuilderConfigGetters = {
-  getJavaScriptBuildCommand: defaultGetter,
-  getDockerRegistry: defaultGetter,
-  getDockerLoginUser: defaultGetter,
-  getDockerLoginToken: defaultGetter,
-  getDockerImageRepoTag: defaultGetter,
-  getDockerBuildCommand: defaultGetter,
-}
+import { BuilderConfigGetters, defaultConfigGetters, JavaScriptBuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class ActionBuilderBase {
   readonly workdir: string
@@ -39,18 +13,14 @@ export class ActionBuilderBase {
   readonly actionConfig: ActionConfig
   actionConfigPath: string = ''
 
-  configGetters: BuilderConfigGetters
+  configGetters: JavaScriptBuilderConfigGetters | DockerBuilderConfigGetters
 
   private branch = ''
   private tags: string[] = []
 
-  constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
+  constructor(yamlConfig: ActionConfig, configGetters: JavaScriptBuilderConfigGetters & DockerBuilderConfigGetters, workdir=process.cwd()) {
     this.actionConfig = Object.assign({}, yamlConfig)
     this.workdir = workdir
-    this.configGetters = defaultConfigGetters
-  }
-
-  configure(configGetters: BuilderConfigGetters) {
     this.configGetters = configGetters
   }
 

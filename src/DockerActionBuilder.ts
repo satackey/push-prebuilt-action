@@ -7,15 +7,20 @@ import {
   DockerActionConfig,
   assertIsDockerActionConfig,
 } from './ActionConfig'
+import { BuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class DockerActionBuilder extends ActionBuilderBase {
   actionConfig: DockerActionConfig
+  configGetters: DockerBuilderConfigGetters
 
-  constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
-    super(yamlConfig, workdir)
+  constructor(yamlConfig: ActionConfig, configGetters: BuilderConfigGetters, workdir=process.cwd()) {
+    super(yamlConfig, configGetters, workdir)
+
     assertIsDockerActionConfig(yamlConfig)
     this.actionConfig = yamlConfig
-  }
+
+    this.configGetters = configGetters
+}
 
   private async loginToDockerRegistry() {
     const registry = this.configGetters.getDockerRegistry(false)
@@ -30,6 +35,9 @@ export class DockerActionBuilder extends ActionBuilderBase {
     const user = this.configGetters.getDockerLoginUser(true)
     const token = this.configGetters.getDockerLoginToken(true)
 
+    // Todo: use stdin
+    // https://github.com/actions/toolkit/pull/360
+    // waiting for new release.
     await exec.exec('docker login', [
       registry,
       '-u', user,
@@ -54,8 +62,6 @@ export class DockerActionBuilder extends ActionBuilderBase {
 
   async push(force: boolean) {
     await this.loginToDockerRegistry()
-
-    // docker push
     await exec.exec('docker push', [this.actionConfig.runs.image.replace('docker://', '')])
 
     // git push

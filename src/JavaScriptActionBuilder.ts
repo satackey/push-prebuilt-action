@@ -9,20 +9,18 @@ import {
   JavaScriptActionConfig,
   assertIsJavaScriptActionConfig,
 } from './ActionConfig'
-
-// https://stackoverflow.com/a/44688997
-type nonEmptyString = never & string; // Cannot be implicitly cast to
-function isNonEmptyString(str: string): str is nonEmptyString {
-    return !!str && str.length > 0; // Or any other logic, removing whitespace, etc.
-}
+import { BuilderConfigGetters, JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class JavaScriptActionBuilder extends ActionBuilderBase {
   actionConfig: JavaScriptActionConfig
+  configGetters: JavaScriptBuilderConfigGetters
 
-  constructor(yamlConfig: ActionConfig, workdir=process.cwd()) {
-    super(yamlConfig, workdir)
+  constructor(yamlConfig: ActionConfig, configGetters: BuilderConfigGetters, workdir=process.cwd()) {
+    super(yamlConfig, configGetters, workdir)
     assertIsJavaScriptActionConfig(yamlConfig)
     this.actionConfig = yamlConfig
+
+    this.configGetters = configGetters
   }
 
   private async installNcc() {

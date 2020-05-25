@@ -2,11 +2,11 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import * as yaml from 'js-yaml'
 
-import { ActionBuilderBase, BuilderConfigGetters } from './ActionBuilderBase'
+import { ActionBuilderBase } from './ActionBuilderBase'
 import { DockerActionBuilder } from './DockerActionBuilder'
 import { JavaScriptActionBuilder } from './JavaScriptActionBuilder'
 import { assertIsActionConfig, ActionConfig } from './ActionConfig'
-// type CustomizedBuilder = DockerActionBuilder | JavaScriptActionBuilder
+import { BuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export const createBuilder = async (yamlDir: string, configGetters: BuilderConfigGetters): Promise<ActionBuilderBase> => {
 
@@ -14,9 +14,8 @@ export const createBuilder = async (yamlDir: string, configGetters: BuilderConfi
   const actionConfig = await readYamlFileFrom(yamlFilePath)
   assertIsActionConfig(actionConfig)
 
-  const builder = await createBuilderFrom(actionConfig, yamlDir)
+  const builder = await createBuilderFrom(actionConfig, configGetters, yamlDir)
   builder.actionConfigPath = yamlFilePath
-  await builder.configure(configGetters)
 
   return builder
 }
@@ -45,11 +44,11 @@ const readYamlFileFrom = async (yamlPath: string): Promise<any> => {
   })
 }
 
-const createBuilderFrom = async (anActionConfig: ActionConfig, yamlDir: string): Promise<ActionBuilderBase> => {
+const createBuilderFrom = async (anActionConfig: ActionConfig, configGetters: BuilderConfigGetters, yamlDir: string): Promise<ActionBuilderBase> => {
   if (anActionConfig.runs.using === 'node12') {
-    return new JavaScriptActionBuilder(anActionConfig, yamlDir)
+    return new JavaScriptActionBuilder(anActionConfig, configGetters, yamlDir)
   }
 
   // if (actionConfig.runs.using === 'docker')
-  return new DockerActionBuilder(anActionConfig, yamlDir)
+  return new DockerActionBuilder(anActionConfig, configGetters, yamlDir)
 }
