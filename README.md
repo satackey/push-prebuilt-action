@@ -131,7 +131,7 @@ The description `action.yml` can be read as `action.yaml`.
     The Docker registry's repository of push action image.
 
 - `docker-repotag` **Required**  
-    The username to login to the Docker registry.
+    The Docker registry's repository of push action image.
 
 - `docker-user` **Required**  
     The username to login to the Docker registry.
