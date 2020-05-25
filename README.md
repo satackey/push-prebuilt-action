@@ -1,7 +1,6 @@
 # Push pre-built JS/TS/Docker GitHub Action
 
-This GitHub Action makes your JavaScript, TypeScript, Docker container action pre-built,
-so you can reduce time of CI execution.
+This GitHub action reduces CI execution time by pre-building JavaScript, TypeScript, and Docker container actions.
 
 ## What does this action do to make it pre-built?
 
