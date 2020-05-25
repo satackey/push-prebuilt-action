@@ -1,7 +1,7 @@
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilderBase } from './ActionBuilderBase'
+import { ActionBuilder } from './ActionBuilderBase'
 import {
   ActionConfig,
   DockerActionConfig,
@@ -9,7 +9,7 @@ import {
 } from './ActionConfig'
 import { BuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
-export class DockerActionBuilder extends ActionBuilderBase {
+export class DockerActionBuilder extends ActionBuilder {
   actionConfig: DockerActionConfig
   configGetters: DockerBuilderConfigGetters
 

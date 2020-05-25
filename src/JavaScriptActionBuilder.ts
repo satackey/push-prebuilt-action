@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilderBase } from './ActionBuilderBase'
+import { ActionBuilder } from './ActionBuilderBase'
 
 import {
   ActionConfig,
@@ -11,7 +11,7 @@ import {
 } from './ActionConfig'
 import { BuilderConfigGetters, JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
-export class JavaScriptActionBuilder extends ActionBuilderBase {
+export class JavaScriptActionBuilder extends ActionBuilder {
   actionConfig: JavaScriptActionConfig
   configGetters: JavaScriptBuilderConfigGetters
 

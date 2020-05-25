@@ -7,7 +7,7 @@ import {
 } from './ActionConfig'
 import { BuilderConfigGetters, defaultConfigGetters, JavaScriptBuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
-export class ActionBuilderBase {
+export class ActionBuilder {
   readonly workdir: string
 
   readonly actionConfig: ActionConfig
@@ -157,7 +157,7 @@ export class ActionBuilderBase {
 }
 
 // A mock for test
-export class ActionBuilderBaseMock extends ActionBuilderBase {
+export class ActionBuilderBaseMock extends ActionBuilder {
   protected validatePersonalConfig(_: BuilderConfigGetters) {
     console.log('Since this instance is the mock, skipping run validatePersonalConfig.')
   }
