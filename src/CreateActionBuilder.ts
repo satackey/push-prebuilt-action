@@ -2,7 +2,7 @@ import path from 'path'
 import { promises as fs } from 'fs'
 import * as yaml from 'js-yaml'
 
-import { ActionBuilder } from './ActionBuilderBase'
+import { ActionBuilder } from './ActionBuilder'
 import { DockerActionBuilder } from './DockerActionBuilder'
 import { JavaScriptActionBuilder } from './JavaScriptActionBuilder'
 import { assertIsActionConfig, ActionConfig } from './ActionConfig'

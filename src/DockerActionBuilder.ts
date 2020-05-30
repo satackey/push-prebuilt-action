@@ -1,7 +1,7 @@
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilder } from './ActionBuilderBase'
+import { ActionBuilder } from './ActionBuilder'
 import {
   ActionConfig,
   DockerActionConfig,
