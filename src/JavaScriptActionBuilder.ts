@@ -9,13 +9,13 @@ import {
   JavaScriptActionConfig,
   assertIsJavaScriptActionConfig,
 } from './ActionConfig'
-import { BuilderConfigGetters, JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { UnionBuilderConfigGetters, JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class JavaScriptActionBuilder extends ActionBuilder {
   actionConfig: JavaScriptActionConfig
   configGetters: JavaScriptBuilderConfigGetters
 
-  constructor(yamlConfig: ActionConfig, configGetters: BuilderConfigGetters, workdir=process.cwd()) {
+  constructor(yamlConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, workdir=process.cwd()) {
     super(yamlConfig, configGetters, workdir)
     assertIsJavaScriptActionConfig(yamlConfig)
     this.actionConfig = yamlConfig

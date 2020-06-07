@@ -13,7 +13,8 @@ export interface JavaScriptBuilderConfigGetters {
   getJavaScriptBuildCommand: Getter
 }
 
-export type BuilderConfigGetters = DockerBuilderConfigGetters & JavaScriptBuilderConfigGetters
+export type UnionBuilderConfigGetters = DockerBuilderConfigGetters & JavaScriptBuilderConfigGetters
+export type IntersectionBuilderConfigGetters = DockerBuilderConfigGetters | JavaScriptBuilderConfigGetters
 
 export const defaultGetter: Getter = (required) => {
   if (required) {
@@ -22,7 +23,7 @@ export const defaultGetter: Getter = (required) => {
   return ''
 }
 
-export const defaultConfigGetters: BuilderConfigGetters = {
+export const defaultConfigGetters: UnionBuilderConfigGetters = {
   getJavaScriptBuildCommand: defaultGetter,
   getDockerRegistry: defaultGetter,
   getDockerLoginUser: defaultGetter,

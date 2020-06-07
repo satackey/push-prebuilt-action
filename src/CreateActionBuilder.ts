@@ -6,9 +6,9 @@ import { ActionBuilder } from './ActionBuilder'
 import { DockerActionBuilder } from './DockerActionBuilder'
 import { JavaScriptActionBuilder } from './JavaScriptActionBuilder'
 import { assertIsActionConfig, ActionConfig } from './ActionConfig'
-import { BuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { UnionBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
-export const createBuilder = async (yamlDir: string, configGetters: BuilderConfigGetters): Promise<ActionBuilder> => {
+export const createBuilder = async (yamlDir: string, configGetters: UnionBuilderConfigGetters): Promise<ActionBuilder> => {
 
   const yamlFilePath = await findYamlFile(yamlDir)
   const actionConfig = await readYamlFileFrom(yamlFilePath)
@@ -44,7 +44,7 @@ const readYamlFileFrom = async (yamlPath: string): Promise<any> => {
   })
 }
 
-const createBuilderFrom = async (anActionConfig: ActionConfig, configGetters: BuilderConfigGetters, yamlDir: string): Promise<ActionBuilder> => {
+const createBuilderFrom = async (anActionConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, yamlDir: string): Promise<ActionBuilder> => {
   if (anActionConfig.runs.using === 'node12') {
     return new JavaScriptActionBuilder(anActionConfig, configGetters, yamlDir)
   }
