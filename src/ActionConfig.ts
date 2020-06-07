@@ -37,11 +37,13 @@ export function assertIsActionConfig(actionConfig: any): asserts actionConfig is
 export interface DockerActionConfig extends ActionConfig {
   runs: {
     using: 'docker'
+    'pre-entrypoint'?: string
+    image: string
     env: {
       [key: string]: string
     }
-    image: string
     entrypoint?: string
+    'post-entrypoint'?: string
     args?: string[]
   }
 }
@@ -57,6 +59,10 @@ export interface JavaScriptActionConfig extends ActionConfig {
   runs: {
     using: 'node12'
     main: string
+    pre?: string
+    'pre-if'?: string
+    post?: string
+    'post-if'?: string
   }
 }
 
