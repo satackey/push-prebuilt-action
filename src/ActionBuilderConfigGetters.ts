@@ -13,7 +13,7 @@ export interface JavaScriptBuilderConfigGetters {
   getJavaScriptBuildCommand: Getter
 }
 
-export type BuilderConfigGetters = DockerBuilderConfigGetters & JavaScriptBuilderConfigGetters 
+export type BuilderConfigGetters = DockerBuilderConfigGetters & JavaScriptBuilderConfigGetters
 
 export const defaultGetter: Getter = (required) => {
   if (required) {

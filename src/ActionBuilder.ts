@@ -13,12 +13,12 @@ export class ActionBuilder {
   readonly actionConfig: ActionConfig
   actionConfigPath: string = ''
 
-  configGetters: JavaScriptBuilderConfigGetters | DockerBuilderConfigGetters
+  configGetters: BuilderConfigGetters
 
   private branch = ''
   private tags: string[] = []
 
-  constructor(yamlConfig: ActionConfig, configGetters: JavaScriptBuilderConfigGetters & DockerBuilderConfigGetters, workdir=process.cwd()) {
+  constructor(yamlConfig: ActionConfig, configGetters: BuilderConfigGetters, workdir=process.cwd()) {
     this.actionConfig = Object.assign({}, yamlConfig)
     this.workdir = workdir
     this.configGetters = configGetters
