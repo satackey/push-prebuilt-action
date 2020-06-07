@@ -1,19 +1,19 @@
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilder } from './ActionBuilderBase'
+import { ActionBuilder } from './ActionBuilder'
 import {
   ActionConfig,
   DockerActionConfig,
   assertIsDockerActionConfig,
 } from './ActionConfig'
-import { BuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { UnionBuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class DockerActionBuilder extends ActionBuilder {
   actionConfig: DockerActionConfig
   configGetters: DockerBuilderConfigGetters
 
-  constructor(yamlConfig: ActionConfig, configGetters: BuilderConfigGetters, workdir=process.cwd()) {
+  constructor(yamlConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, workdir=process.cwd()) {
     super(yamlConfig, configGetters, workdir)
 
     assertIsDockerActionConfig(yamlConfig)

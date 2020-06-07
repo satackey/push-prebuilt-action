@@ -5,7 +5,7 @@ import exec from 'actions-exec-listener'
 import {
   ActionConfig,
 } from './ActionConfig'
-import { BuilderConfigGetters, defaultConfigGetters, JavaScriptBuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { UnionBuilderConfigGetters, defaultConfigGetters, JavaScriptBuilderConfigGetters, DockerBuilderConfigGetters, IntersectionBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class ActionBuilder {
   readonly workdir: string
@@ -13,12 +13,12 @@ export class ActionBuilder {
   readonly actionConfig: ActionConfig
   actionConfigPath: string = ''
 
-  configGetters: JavaScriptBuilderConfigGetters | DockerBuilderConfigGetters
+  configGetters: IntersectionBuilderConfigGetters
 
   private branch = ''
   private tags: string[] = []
 
-  constructor(yamlConfig: ActionConfig, configGetters: JavaScriptBuilderConfigGetters & DockerBuilderConfigGetters, workdir=process.cwd()) {
+  constructor(yamlConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, workdir=process.cwd()) {
     this.actionConfig = Object.assign({}, yamlConfig)
     this.workdir = workdir
     this.configGetters = configGetters
@@ -158,7 +158,7 @@ export class ActionBuilder {
 
 // A mock for test
 export class ActionBuilderBaseMock extends ActionBuilder {
-  protected validatePersonalConfig(_: BuilderConfigGetters) {
+  protected validatePersonalConfig(_: UnionBuilderConfigGetters) {
     console.log('Since this instance is the mock, skipping run validatePersonalConfig.')
   }
 }

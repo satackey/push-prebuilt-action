@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 
 import { createBuilder } from './src/CreateActionBuilder'
-import { BuilderConfigGetters } from './src/ActionBuilderConfigGetters'
+import { UnionBuilderConfigGetters } from './src/ActionBuilderConfigGetters'
 
 const main = async () => {
   const configGetters = createConfigGetters()
@@ -25,7 +25,7 @@ const main = async () => {
   }
 }
 
-const createConfigGetters = (): BuilderConfigGetters => ({
+const createConfigGetters = (): UnionBuilderConfigGetters => ({
   getJavaScriptBuildCommand: (required) => core.getInput(`js-build-command`, { required }),
   getDockerRegistry: (required) => core.getInput(`docker-registry`, { required }),
   getDockerLoginUser: (required) => core.getInput(`docker-user`, { required }),
