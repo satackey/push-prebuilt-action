@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@actions/core": "^1.2.4",
-    "actions-exec-listener": "^0.0.1",
+    "actions-exec-listener": "^0.0.2",
     "js-yaml": "^3.13.1",
     "rimraf": "^3.0.2",
     "string-format": "^2.0.0"
