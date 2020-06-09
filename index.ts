@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 
 import { createBuilder } from './src/CreateActionBuilder'
-import { UnionBuilderConfigGetters } from './src/ActionBuilderConfigGetters'
+import { IntersectionBuilderConfigGetters } from './src/ActionBuilderConfigGetters'
 
 const main = async () => {
   const configGetters = createConfigGetters()
@@ -25,7 +25,7 @@ const main = async () => {
   }
 }
 
-const createConfigGetters = (): UnionBuilderConfigGetters => ({
+const createConfigGetters = (): IntersectionBuilderConfigGetters => ({
   getJavaScriptBuildCommand: (required) => core.getInput(`js-build-command`, { required }),
   getDockerRegistry: (required) => core.getInput(`docker-registry`, { required }),
   getDockerLoginUser: (required) => core.getInput(`docker-user`, { required }),
@@ -36,5 +36,5 @@ const createConfigGetters = (): UnionBuilderConfigGetters => ({
 
 main().catch(e => {
   console.error(e)
-  process.exit(1)
+  core.setFailed(e)
 })

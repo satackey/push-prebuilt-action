@@ -1,6 +1,9 @@
 import { promises as fs } from 'fs'
+import { ExecOptions } from '@actions/exec/lib/interfaces'
 import * as yaml from 'js-yaml'
+import * as core from '@actions/core'
 import exec from 'actions-exec-listener'
+import format from 'string-format'
 
 import {
   ActionConfig,
@@ -8,20 +11,16 @@ import {
 import { UnionBuilderConfigGetters, defaultConfigGetters, JavaScriptBuilderConfigGetters, DockerBuilderConfigGetters, IntersectionBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class ActionBuilder {
-  readonly workdir: string
+  workdir: string = process.cwd()
 
   readonly actionConfig: ActionConfig
   actionConfigPath: string = ''
 
-  configGetters: IntersectionBuilderConfigGetters
-
   private branch = ''
   private tags: string[] = []
 
-  constructor(yamlConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, workdir=process.cwd()) {
+  constructor(yamlConfig: ActionConfig) {
     this.actionConfig = Object.assign({}, yamlConfig)
-    this.workdir = workdir
-    this.configGetters = configGetters
   }
 
   async configureGit(name: string, email: string) {
@@ -48,6 +47,22 @@ export class ActionBuilder {
     }
   }
 
+
+
+
+  async exec(command: string, args?: string[], options?: ExecOptions) {
+    const execCwd = () => exec.exec(command, args, {
+      cwd: this.workdir,
+      ...options
+    })
+
+    if (!options?.silent) {
+      const argsStr = args != null ? args.join(' ') : ''
+      return core.group(`${command} ${argsStr}`, execCwd)
+    }
+    return execCwd()
+  }
+
   async exists(aPath: string): Promise<boolean> {
     const absolutePath = this.resolveAbsoluteFor(aPath)
 
@@ -56,7 +71,7 @@ export class ActionBuilder {
       return true
     } catch (e) {
       // Throw an error if the file/dir is an error other than non-existent.
-      if (!e.message.includes('no such file or directory')) {
+      if (e.code !== 'ENOENT') {
         throw e
       }
     }
@@ -111,9 +126,17 @@ export class ActionBuilder {
     )])
   }
 
-  async commit(branch: string, tags: string[], message: string) {
-    this.assertCommitArgs(branch, tags, message)
-    await this.commitWithoutCheckingArgs(branch, tags, message)
+  async commit(unformattedBranch: string, tags: string[], message: string) {
+    const formattedBranch = format(unformattedBranch, {
+      branch: this.getCurrentBranchName()
+    })
+    this.assertCommitArgs(formattedBranch, tags, message)
+    await this.commitWithoutCheckingArgs(formattedBranch, tags, message)
+  }
+
+  async getCurrentBranchName() {
+    const { exitCode, stdoutStr } = await exec.exec(`git symbolic-ref --short -q HEAD`, [], { cwd: this.workdir, failOnStdErr: false })
+    return exitCode === 0 ? stdoutStr : ''
   }
 
   protected async commitWithoutCheckingArgs(branch: string, tags: string[], message: string) {

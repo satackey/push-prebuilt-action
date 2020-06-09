@@ -13,13 +13,12 @@ export class DockerActionBuilder extends ActionBuilder {
   actionConfig: DockerActionConfig
   configGetters: DockerBuilderConfigGetters
 
-  constructor(yamlConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, workdir=process.cwd()) {
-    super(yamlConfig, configGetters, workdir)
-
+  constructor(yamlConfig: DockerActionConfig, configGetters: DockerBuilderConfigGetters, workdir: string) {
+    super(yamlConfig)
     assertIsDockerActionConfig(yamlConfig)
     this.actionConfig = yamlConfig
-
     this.configGetters = configGetters
+    this.workdir = workdir
 }
 
   private async loginToDockerRegistry() {

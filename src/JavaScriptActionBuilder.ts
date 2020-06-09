@@ -4,103 +4,120 @@ import format from 'string-format'
 
 import { ActionBuilder } from './ActionBuilder'
 
-import {
-  ActionConfig,
-  JavaScriptActionConfig,
-  assertIsJavaScriptActionConfig,
-} from './ActionConfig'
-import { UnionBuilderConfigGetters, JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { JavaScriptActionConfig } from './ActionConfig'
+import { JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { createPackageManager } from './PackageManager/CreatePackageManager'
+import { PackageManager } from './PackageManager/PackageManager'
 
 export class JavaScriptActionBuilder extends ActionBuilder {
   actionConfig: JavaScriptActionConfig
   configGetters: JavaScriptBuilderConfigGetters
+  packageManager?: PackageManager
+  distPrefix = ''
 
-  constructor(yamlConfig: ActionConfig, configGetters: UnionBuilderConfigGetters, workdir=process.cwd()) {
-    super(yamlConfig, configGetters, workdir)
-    assertIsJavaScriptActionConfig(yamlConfig)
+  constructor(yamlConfig: JavaScriptActionConfig, configGetters: JavaScriptBuilderConfigGetters, workdir: string) {
+    super(yamlConfig)
     this.actionConfig = yamlConfig
-
     this.configGetters = configGetters
+    this.workdir = workdir
   }
 
-  private async installNcc() {
+  private async installNccGlobally() {
     core.startGroup('npm install -g @zeit/ncc')
     await exec.exec('npm install -g @zeit/ncc')
     core.endGroup()
   }
 
-  async getInstallManager(): Promise<'yarn' | 'npm' | 'duplicate' | 'none'> {
-    if (await this.exists('package-lock.json') && await this.exists('yarn.lock')) {
-      return 'duplicate'
-    }
-
-    if (await this.exists('package-lock.json')) {
-      return 'npm'
-    }
-
-    if (await this.exists('yarn.lock')) {
-      return 'yarn'
-    }
-
-    return 'none'
-  }
-
-  private async installWithNpm() {
-    core.startGroup('npm ci')
-    await exec.exec('npm ci')
-    core.endGroup()
-  }
-
-  private async installWithYarn() {
-    core.startGroup('yarn install --frozen-lockfile --non-interactive')
-    await exec.exec('yarn install --frozen-lockfile --non-interactive')
-    core.endGroup()
-  }
-
   private async installDependenciesIfNotInstalled() {
-    if (await this.exists(this.resolveAbsoluteFor(`${this.workdir}/node_modules`))) {
-      console.log(`info: node_modules found. skipping install dependencies.`)
-      return
-    }
-    await this.installDependencies()
+    this.packageManager = await createPackageManager(this.workdir)
+    await this.packageManager.installDependenciesIfNotInstalled()
   }
 
+  async dependsTtsc(): Promise<boolean> {
+    return this.packageManager != null ? await this.packageManager.isTtscUsed() : false
+  }
 
-  private async installDependencies() {
-    const log = (file: string, pkg: string, level='info') => console.log(`${level}: ${file} found. Install dependencies with ${pkg}.`)
+  private async transpileIfDependsTtsc() {
+    if (await this.dependsTtsc()) {
+      core.info(`info: This action seems to depend on ttypescript, so I'll transpile using ttsc before bundling.`)
+      const distDir = `ttsc-dist`
+      await this.packageManager!.exec('ttsc --outDir', [distDir])
 
-    switch (await this.getInstallManager()) {
-      case 'duplicate':
-        throw new Error('Both package-lock.json and yarn.lock found.')
-
-      case 'npm':
-        log('package-lock.json', 'npm')
-        await this.installWithNpm()
-        break
-
-      case 'yarn':
-        log('yarn.lock', 'yarn')
-        await this.installWithYarn()
-        break
-
-      default:
-        throw new Error('Neither package-lock.json nor yarn.lock were found.')
+      this.replaceActionConfigEntrypoints(this.distPrefix, distDir)
     }
   }
 
   async build() {
-    await this.installNcc()
+    await this.installNccGlobally()
     await this.installDependenciesIfNotInstalled()
 
+    await this.transpileIfDependsTtsc()
     const unformattedBuildCommand = this.configGetters.getJavaScriptBuildCommand(true)
-    const formattedBuildCommand = format(unformattedBuildCommand, {
-      main: this.actionConfig.runs.main
-    })
+    await this.packageManager!.run(this.makeBuildCommand(unformattedBuildCommand, true))
 
-    await exec.exec(formattedBuildCommand, [], {
-      cwd: this.workdir
-    })
+    this.replaceActionConfigEntrypoints(this.distPrefix, 'dist')
+  }
 
-    this.actionConfig.runs.main = 'dist/index.js'
+  makeBuildCommand(unformattedCommand: string, log=false): string {
+    if (this.hasActionConfigDistInRuns(log)) {
+      return formatBuildCommand(unformattedCommand)
+    }
+    return formatBuildCommand(
+      unformattedCommand,
+      this.actionConfig.runs.main,
+      this.actionConfig.runs.post,
+      this.actionConfig.runs.pre
+    )
+
+    function formatBuildCommand(unformatted: string, main?: string, post?: string, pre?: string) {
+      return format(unformatted, {
+        pre: pre || '',
+        main: main || '',
+        post: post || '',
+      })
+    }
+  }
+
+  hasActionConfigDistInRuns(log=false) {
+    const result = this.actionConfig.runs.main.startsWith('dist/')
+
+    if (log) {
+      core.info(
+        'Since runs.main starts with `dist/`,' + 
+        `I'd disable the replacement of entrypoints such as main, post, pre in run.`
+      )
+    }
+
+    if (result) {
+      checkIfAllRunsSpecifiedDist(this.actionConfig.runs)
+    }
+
+    return result
+
+    function checkIfAllRunsSpecifiedDist(runs: JavaScriptActionConfig['runs']) {
+      const commonErrorMessage = 'must starts with `dist/` because runs.main starts with `dist/`.'
+      // if post/pre were specified, they must be starts with `dist/`
+      if (runs.post != null && runs.post.startsWith(`dist/`)) {
+        throw new Error(`runs.post ${commonErrorMessage}`)
+      }
+
+      if (runs.pre != null && runs.pre.startsWith(`dist/`)) {
+        throw new Error(`runs.pre ${commonErrorMessage}`)
+      }
+    }
+  }
+
+  replaceActionConfigEntrypoints(oldSubstr: string, newSubStr: string) {
+    const replace = (str: string) => str.replace(oldSubstr, newSubStr)
+
+    if (this.actionConfig.runs.pre != null) {
+      this.actionConfig.runs.pre = replace(this.actionConfig.runs.pre)
+    }
+
+    this.actionConfig.runs.main = replace(this.actionConfig.runs.main)
+
+    if (this.actionConfig.runs.post != null) {
+      this.actionConfig.runs.post = replace(this.actionConfig.runs.post)
+    }
   }
 }
