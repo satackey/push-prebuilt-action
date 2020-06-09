@@ -4,8 +4,8 @@ import * as yaml from 'js-yaml'
 import { is } from 'typescript-is'
 
 import { ActionBuilder } from './ActionBuilder'
-import { DockerActionBuilder } from './DockerActionBuilder'
-import { JavaScriptActionBuilder } from './JavaScriptActionBuilder'
+import { DockerActionBuilder } from './DockerActionBuilder/DockerActionBuilder'
+import { JavaScriptActionBuilder } from './JavaScriptActionBuilder/JavaScriptActionBuilder'
 import { assertIsActionConfig, ActionConfig, JavaScriptActionConfig, DockerActionConfig } from './ActionConfig'
 import { IntersectionBuilderConfigGetters } from './ActionBuilderConfigGetters'
 

@@ -2,10 +2,10 @@ import * as core from '@actions/core'
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilder } from './ActionBuilder'
+import { ActionBuilder } from '../ActionBuilder'
 
-import { JavaScriptActionConfig } from './ActionConfig'
-import { JavaScriptBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { JavaScriptActionConfig } from '../ActionConfig'
+import { JavaScriptBuilderConfigGetters } from '../ActionBuilderConfigGetters'
 import { createPackageManager } from './PackageManager/CreatePackageManager'
 import { PackageManager } from './PackageManager/PackageManager'
 

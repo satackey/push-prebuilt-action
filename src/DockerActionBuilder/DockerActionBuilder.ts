@@ -1,13 +1,12 @@
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilder } from './ActionBuilder'
+import { ActionBuilder } from '../ActionBuilder'
 import {
-  ActionConfig,
   DockerActionConfig,
   assertIsDockerActionConfig,
-} from './ActionConfig'
-import { UnionBuilderConfigGetters, DockerBuilderConfigGetters } from './ActionBuilderConfigGetters'
+} from '../ActionConfig'
+import { DockerBuilderConfigGetters } from '../ActionBuilderConfigGetters'
 
 export class DockerActionBuilder extends ActionBuilder {
   actionConfig: DockerActionConfig
