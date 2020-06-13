@@ -5,7 +5,7 @@ export class Branch {
   async deleteBranchIfExists(deletedBranch: string, unformattedBranchInput: string) {
     const branchToBeDeleted = this.formatted(unformattedBranchInput, deletedBranch)
     if (this.existsBranch(branchToBeDeleted)) {
-
+      await this.deleteBranch(branchToBeDeleted)
     }
   }
 
@@ -14,7 +14,7 @@ export class Branch {
   }
 
   async existsBranch(branch: string): Promise<boolean> {
-    const { stdoutStr: rawBranchList } = await exec.exec(`git ls-remote --heads $(git remote get-url origin) ${branch}`)
+    const { stdoutStr: rawBranchList } = await exec.exec(`sh -c`, [`git ls-remote --heads $(git remote get-url origin) ${branch}`])
     return rawBranchList.includes(branch)
   }
 

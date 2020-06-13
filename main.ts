@@ -10,7 +10,8 @@ const main = async () => {
 
   if (core.getInput('push-branch') !== '' && core.getInput(`delete-branch`, { required: true }) === `true`) {
     const branch = new Branch()
-    branch.deleteBranchIfExists(core.getInput(`delete-branch-ref`, { required: true }), core.getInput('push-branch', { required: true }))
+    await branch.deleteBranchIfExists(core.getInput(`delete-branch-ref`, { required: true }), core.getInput('push-branch', { required: true }))
+    return
   }
 
   await actionBuilder.build()
