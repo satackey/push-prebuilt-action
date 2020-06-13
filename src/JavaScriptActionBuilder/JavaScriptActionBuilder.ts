@@ -19,7 +19,9 @@ export class JavaScriptActionBuilder extends ActionBuilder {
 
   constructor(yamlConfig: JavaScriptActionConfig, configGetters: JavaScriptBuilderConfigGetters, workdir: string) {
     super(yamlConfig)
+    core.debug(JSON.stringify(yamlConfig))
     this.actionConfig = yamlConfig
+    core.debug(JSON.stringify(this.actionConfig))
     this.configGetters = configGetters
     this.workdir = workdir
   }
