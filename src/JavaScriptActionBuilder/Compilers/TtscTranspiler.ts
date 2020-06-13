@@ -6,7 +6,7 @@ export class TtscTranspiler extends Compiler {
   }
 
   getCompileCommandFor(aFile: string): [string, string[]] {
-    return [`ttsc --outDir`, [this.getOutDir(), aFile]]
+    return [`ttsc --outDir`, [this.getOutDir()]]
   }
 
   getCompiledFilePathFor(aFile: string): string {
