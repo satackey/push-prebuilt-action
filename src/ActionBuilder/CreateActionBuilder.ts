@@ -1,13 +1,14 @@
 import path from 'path'
 import { promises as fs } from 'fs'
+import * as core from '@actions/core'
 import * as yaml from 'js-yaml'
 import { is } from 'typescript-is'
 
-import { ActionBuilder } from './ActionBuilder'
-import { DockerActionBuilder } from '../DockerActionBuilder/DockerActionBuilder'
-import { JavaScriptActionBuilder } from '../JavaScriptActionBuilder/JavaScriptActionBuilder'
-import { assertIsActionConfig, ActionConfig, JavaScriptActionConfig, DockerActionConfig } from '../ActionConfig'
-import { IntersectionBuilderConfigGetters } from './ActionBuilderConfigGetters'
+import { ActionBuilder } from './ActionBuilder/ActionBuilder'
+import { DockerActionBuilder } from './DockerActionBuilder/DockerActionBuilder'
+import { JavaScriptActionBuilder } from './JavaScriptActionBuilder/JavaScriptActionBuilder'
+import { assertIsActionConfig, ActionConfig, JavaScriptActionConfig, DockerActionConfig } from './ActionConfig'
+import { IntersectionBuilderConfigGetters } from './ActionBuilder/ActionBuilderConfigGetters'
 
 export const createBuilder = async (yamlDir: string, configGetters: IntersectionBuilderConfigGetters): Promise<ActionBuilder> => {
 
@@ -47,10 +48,14 @@ const readYamlFileFrom = async (yamlPath: string): Promise<any> => {
 
 const createBuilderFrom = async (anActionConfig: ActionConfig, configGetters: IntersectionBuilderConfigGetters, yamlDir: string): Promise<ActionBuilder> => {
   if (is<JavaScriptActionConfig>(anActionConfig)) {
+    core.debug('JavaScriptAction!!')
+    core.debug(JSON.stringify(anActionConfig))
     return new JavaScriptActionBuilder(anActionConfig, configGetters, yamlDir)
   }
 
   if (is<DockerActionConfig>(anActionConfig)) {
+    core.debug('DockerAction!!')
+    core.debug(JSON.stringify(anActionConfig))
     return new DockerActionBuilder(anActionConfig, configGetters, yamlDir)
   }
 

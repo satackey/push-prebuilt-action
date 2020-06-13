@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import exec from 'actions-exec-listener'
-import format from 'string-format'
 
 import { ActionBuilder } from '../ActionBuilder/ActionBuilder'
 import { JavaScriptActionConfig, ActionConfig } from '../ActionConfig'
@@ -49,6 +48,9 @@ export class JavaScriptActionBuilder extends ActionBuilder {
 
   async buildSingleEntrypoint(entry: 'pre' | 'main' | 'post') {
     if (typeof this.actionConfig.runs[entry] !== 'string') {
+      if (entry === 'main') {
+        throw new Error('What?How can main be undefined??????')
+      }
       return
     }
 
