@@ -7,8 +7,8 @@ import format from 'string-format'
 
 import {
   ActionConfig,
-} from './ActionConfig'
-import { UnionBuilderConfigGetters, defaultConfigGetters, JavaScriptBuilderConfigGetters, DockerBuilderConfigGetters, IntersectionBuilderConfigGetters } from './ActionBuilderConfigGetters'
+} from '../ActionConfig'
+import { UnionBuilderConfigGetters } from './ActionBuilderConfigGetters'
 
 export class ActionBuilder {
   workdir: string = process.cwd()

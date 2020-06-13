@@ -1,12 +1,12 @@
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilder } from '../ActionBuilder'
+import { ActionBuilder } from '../ActionBuilder/ActionBuilder'
 import {
   DockerActionConfig,
   assertIsDockerActionConfig,
 } from '../ActionConfig'
-import { DockerBuilderConfigGetters } from '../ActionBuilderConfigGetters'
+import { DockerBuilderConfigGetters } from '../ActionBuilder/ActionBuilderConfigGetters'
 
 export class DockerActionBuilder extends ActionBuilder {
   actionConfig: DockerActionConfig
@@ -18,7 +18,7 @@ export class DockerActionBuilder extends ActionBuilder {
     this.actionConfig = yamlConfig
     this.configGetters = configGetters
     this.workdir = workdir
-}
+  }
 
   private async loginToDockerRegistry() {
     const registry = this.configGetters.getDockerRegistry(false)

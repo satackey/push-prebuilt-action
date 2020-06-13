@@ -2,12 +2,12 @@ import * as core from '@actions/core'
 import exec from 'actions-exec-listener'
 import format from 'string-format'
 
-import { ActionBuilder } from '../ActionBuilder'
+import { ActionBuilder } from '../ActionBuilder/ActionBuilder'
 
 import { JavaScriptActionConfig } from '../ActionConfig'
-import { JavaScriptBuilderConfigGetters } from '../ActionBuilderConfigGetters'
-import { createPackageManager } from './PackageManager/CreatePackageManager'
-import { PackageManager } from './PackageManager/PackageManager'
+import { JavaScriptBuilderConfigGetters } from '../ActionBuilder/ActionBuilderConfigGetters'
+import { createPackageManager } from './PackageManagers/CreatePackageManager'
+import { PackageManager } from './PackageManagers/PackageManager'
 
 export class JavaScriptActionBuilder extends ActionBuilder {
   actionConfig: JavaScriptActionConfig

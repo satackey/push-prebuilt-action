@@ -1,7 +1,7 @@
 import * as core from '@actions/core'
 
-import { createBuilder } from './src/CreateActionBuilder'
-import { IntersectionBuilderConfigGetters } from './src/ActionBuilderConfigGetters'
+import { createBuilder } from './src/ActionBuilder/CreateActionBuilder'
+import { IntersectionBuilderConfigGetters } from './src/ActionBuilder/ActionBuilderConfigGetters'
 
 const main = async () => {
   const configGetters = createConfigGetters()
