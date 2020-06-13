@@ -136,7 +136,7 @@ export class ActionBuilder {
 
   async getCurrentBranchName() {
     const { exitCode, stdoutStr } = await exec.exec(`git symbolic-ref --short -q HEAD`, [], { cwd: this.workdir, failOnStdErr: false })
-    return exitCode === 0 ? stdoutStr : ''
+    return exitCode === 0 ? stdoutStr.replace(`\n`, '') : ''
   }
 
   protected async commitWithoutCheckingArgs(branch: string, tags: string[], message: string) {
