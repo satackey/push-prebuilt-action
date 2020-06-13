@@ -51,11 +51,11 @@ jobs:
     - name: Checkout pre-built
       uses: actions/checkout@v2
       with:
-        ref: ${{ steps.extract.outputs.branch }}
+        ref: release-${{ steps.extract.outputs.branch }}
         path: prebuilt
 
     - name: Release
       uses: './prebuilt'
       with:
         push-branch: release-{branch}
-        js-override-main: main.ts 
+        js-override-main: main.ts
