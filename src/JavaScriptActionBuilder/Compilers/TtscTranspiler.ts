@@ -10,6 +10,6 @@ export class TtscTranspiler extends Compiler {
   }
 
   getCompiledFilePathFor(aFile: string): string {
-    return `${this.getOutDir()}/${aFile}`
+    return `${this.getOutDir()}/${aFile.replace(/\.ts$/, '.js')}`
   }
 }
