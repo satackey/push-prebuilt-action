@@ -26,6 +26,14 @@ inputs:
     required: true
     default: action.yml action.yaml dist .git
 
+  delete-branch:
+    description: Whether to delete the branch when original branch has deleted.
+    required: true
+    default: ${{ github.event_name == 'delete' }}
+  delete-branch-ref:
+    description: The deleted original branch name.
+    required: false
+    default: ${{ github.event.ref }} 
   push-branch:
     description: The name of branch to push compiled file.
     required: false

@@ -2,10 +2,16 @@ import * as core from '@actions/core'
 
 import { createBuilder } from './src/ActionBuilder/CreateActionBuilder'
 import { IntersectionBuilderConfigGetters } from './src/ActionBuilder/ActionBuilderConfigGetters'
+import { Branch } from './src/Branch'
 
 const main = async () => {
   const configGetters = createConfigGetters()
   const actionBuilder = await createBuilder(process.cwd(), configGetters)
+
+  if (core.getInput('push-branch') !== '' && core.getInput(`delete-branch`, { required: true }) === `true`) {
+    const branch = new Branch()
+    branch.deleteBranchIfExists(core.getInput(`delete-branch-ref`, { required: true }), core.getInput('push-branch', { required: true }))
+  }
 
   await actionBuilder.build()
   await actionBuilder.saveActionConfig()
