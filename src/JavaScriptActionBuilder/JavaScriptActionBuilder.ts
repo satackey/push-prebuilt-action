@@ -81,7 +81,7 @@ export class JavaScriptActionBuilder extends ActionBuilder {
 
   getCompiler(): Compiler {
     const createCompiler = (): Compiler => {
-      if (this.configGetters.getJavaScriptBuildCommand(false) === '') {
+      if (this.configGetters.getJavaScriptBuildCommand(false) !== '') {
         core.debug('using: CustomCompier')
         return new CustomCompiler(
           this.packageManager!.exec,
