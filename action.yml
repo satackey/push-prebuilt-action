@@ -63,9 +63,14 @@ inputs:
   js-build-command:
     description: >
       The command and arguments to build JavaScript or TypeScript files.
-      The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
+      The artifacts must be specified by `js-built-path`.
     required: false
+  js-built-path:
+    description: >
+      The path to the location of the files built by `js-build-command`.
+    required: false
+
 runs:
   using: node12
-  # to compile own
+  # to compile self
   main: ts-dist/main.js
