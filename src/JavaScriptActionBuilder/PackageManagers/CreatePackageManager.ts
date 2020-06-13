@@ -11,9 +11,9 @@ export const createPackageManager = async (projectDir: string): Promise<PackageM
 
   if (hasYarnLockfile && hasNpmLockfile) {
     throw new Error(
-      'Both package-lock.json and yarn.lock found.\n' + 
+      'Both package-lock.json and yarn.lock found.\n' +
       `We do not automatically install dependencies to avoid building with upgraded packages unknowingly.\n` +
-      'Either leave one of the lockfiles,\n' + 
+      'Either leave one of the lockfiles,\n' +
       'or run the installation command like `npm ci` manually before running it.'
     )
   }
@@ -27,9 +27,9 @@ export const createPackageManager = async (projectDir: string): Promise<PackageM
   }
 
   throw new Error(
-    'Neither package-lock.json nor yarn.lock were found.\n' + 
+    'Neither package-lock.json nor yarn.lock were found.\n' +
     `We do not automatically install dependencies to avoid building with upgraded packages unknowingly.\n` +
-    'Either add the lockfile to the repository,\n' + 
+    'Either add the lockfile to the repository,\n' +
     'or run the installation command like `npm i` manually before running it.'
   )
 }

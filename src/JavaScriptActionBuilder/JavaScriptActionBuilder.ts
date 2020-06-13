@@ -3,17 +3,20 @@ import exec from 'actions-exec-listener'
 import format from 'string-format'
 
 import { ActionBuilder } from '../ActionBuilder/ActionBuilder'
-
-import { JavaScriptActionConfig } from '../ActionConfig'
+import { JavaScriptActionConfig, ActionConfig } from '../ActionConfig'
 import { JavaScriptBuilderConfigGetters } from '../ActionBuilder/ActionBuilderConfigGetters'
 import { createPackageManager } from './PackageManagers/CreatePackageManager'
 import { PackageManager } from './PackageManagers/PackageManager'
+import { DefaultBundler } from './Compilers/DefaultBundler'
+import { CustomCompiler } from './Compilers/CustomCompiler'
+import { Compiler } from './Compilers/Compiler'
 
 export class JavaScriptActionBuilder extends ActionBuilder {
   actionConfig: JavaScriptActionConfig
   configGetters: JavaScriptBuilderConfigGetters
   packageManager?: PackageManager
   distPrefix = ''
+  cachedCompiler?: Compiler
 
   constructor(yamlConfig: JavaScriptActionConfig, configGetters: JavaScriptBuilderConfigGetters, workdir: string) {
     super(yamlConfig)
@@ -33,91 +36,63 @@ export class JavaScriptActionBuilder extends ActionBuilder {
     await this.packageManager.installDependenciesIfNotInstalled()
   }
 
-  async dependsTtsc(): Promise<boolean> {
-    return this.packageManager != null ? await this.packageManager.isTtscUsed() : false
-  }
-
-  private async transpileIfDependsTtsc() {
-    if (await this.dependsTtsc()) {
-      core.info(`info: This action seems to depend on ttypescript, so I'll transpile using ttsc before bundling.`)
-      const distDir = `ttsc-dist`
-      await this.packageManager!.exec('ttsc --outDir', [distDir])
-
-      this.replaceActionConfigEntrypoints(this.distPrefix, distDir)
-    }
-  }
-
   async build() {
     await this.installNccGlobally()
     await this.installDependenciesIfNotInstalled()
-
-    await this.transpileIfDependsTtsc()
-    const unformattedBuildCommand = this.configGetters.getJavaScriptBuildCommand(true)
-    await this.packageManager!.run(this.makeBuildCommand(unformattedBuildCommand, true))
-
-    this.replaceActionConfigEntrypoints(this.distPrefix, 'dist')
+    await this.buildAllEntrypoints()
   }
 
-  makeBuildCommand(unformattedCommand: string, log=false): string {
-    if (this.hasActionConfigDistInRuns(log)) {
-      return formatBuildCommand(unformattedCommand)
-    }
-    return formatBuildCommand(
-      unformattedCommand,
-      this.actionConfig.runs.main,
-      this.actionConfig.runs.post,
-      this.actionConfig.runs.pre
-    )
+  async buildAllEntrypoints() {
+    const entrypointCandidacies: ('pre' | 'main' | 'post')[] = [`pre`, `main`, `post`]
 
-    function formatBuildCommand(unformatted: string, main?: string, post?: string, pre?: string) {
-      return format(unformatted, {
-        pre: pre || '',
-        main: main || '',
-        post: post || '',
-      })
-    }
+    const compiler = this.getCompiler()
+    await Promise.all(entrypointCandidacies.map(this.buildSingleEntrypoint))
   }
 
-  hasActionConfigDistInRuns(log=false) {
-    const result = this.actionConfig.runs.main.startsWith('dist/')
+  async buildSingleEntrypoint(entry: 'pre' | 'main' | 'post') {
+    if (typeof this.actionConfig.runs[entry] !== 'string') {
+      return
+    }
 
-    if (log) {
+    const compiled = await this.getCompiler().compile(this.actionConfig.runs[entry]!)
+
+    if (this.shouldReplaceEntrypoint(entry)) {
       core.info(
-        'Since runs.main starts with `dist/`,' + 
-        `I'd disable the replacement of entrypoints such as main, post, pre in run.`
+        `Since runs.${entry} starts with \`dist/\`,` +
+        `I'd disable the replacement of it.`
       )
+
+      return
     }
 
-    if (result) {
-      checkIfAllRunsSpecifiedDist(this.actionConfig.runs)
-    }
-
-    return result
-
-    function checkIfAllRunsSpecifiedDist(runs: JavaScriptActionConfig['runs']) {
-      const commonErrorMessage = 'must starts with `dist/` because runs.main starts with `dist/`.'
-      // if post/pre were specified, they must be starts with `dist/`
-      if (runs.post != null && runs.post.startsWith(`dist/`)) {
-        throw new Error(`runs.post ${commonErrorMessage}`)
-      }
-
-      if (runs.pre != null && runs.pre.startsWith(`dist/`)) {
-        throw new Error(`runs.pre ${commonErrorMessage}`)
-      }
-    }
+    this.actionConfig.runs[entry] = compiled
   }
 
-  replaceActionConfigEntrypoints(oldSubstr: string, newSubStr: string) {
-    const replace = (str: string) => str.replace(oldSubstr, newSubStr)
+  getCompiler(): Compiler {
+    const createCompiler = (): Compiler => {
+      if (this.configGetters.getJavaScriptBuildCommand(false) === '') {
+        return new CustomCompiler(
+          this.packageManager!.exec,
+          this.configGetters.getJavaScriptBuildCommand(true),
+          this.configGetters.getJavaScriptBuiltPath(true)
+        )
+      }
 
-    if (this.actionConfig.runs.pre != null) {
-      this.actionConfig.runs.pre = replace(this.actionConfig.runs.pre)
+      return new DefaultBundler(this.packageManager!)
     }
 
-    this.actionConfig.runs.main = replace(this.actionConfig.runs.main)
+    // ---
 
-    if (this.actionConfig.runs.post != null) {
-      this.actionConfig.runs.post = replace(this.actionConfig.runs.post)
+    if (this.cachedCompiler === undefined) {
+      this.cachedCompiler = createCompiler()
     }
+    return this.cachedCompiler
+  }
+
+  shouldReplaceEntrypoint(entrypoint: keyof JavaScriptActionConfig['runs']): boolean {
+    if (typeof this.actionConfig.runs[entrypoint] !== 'string') {
+      return false
+    }
+    return this.actionConfig.runs[entrypoint]!.startsWith('dist/')
   }
 }

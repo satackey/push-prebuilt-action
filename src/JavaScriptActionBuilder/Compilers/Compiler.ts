@@ -1,21 +1,22 @@
 import exec from 'actions-exec-listener'
 
 export class Compiler {
-  runner: typeof exec.exec
+  exec: typeof exec.exec
 
   constructor(runner: typeof exec.exec) {
-    this.runner = runner
+    this.exec = runner
   }
 
-  makeCompileCommand(_: string): string {
+  getCompileCommandFor(aFile: string): [string, string[]?] {
     throw new Error('subclass responsibility. You cannot use this class directly.')
   }
 
-  async compile() {
-    
+  getCompiledFilePathFor(aFile: string): string {
+    throw new Error('subclass responsibility. You cannot use this class directly.')
   }
 
-  getCompiledFilePath() {
-    throw new Error('subclass responsibility. You cannot use this class directly.')
+  async compile(aFile: string): Promise<string> {
+    await this.exec(...this.getCompileCommandFor(aFile))
+    return this.getCompiledFilePathFor(aFile)
   }
 }

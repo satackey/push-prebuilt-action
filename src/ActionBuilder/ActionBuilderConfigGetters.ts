@@ -11,6 +11,7 @@ export interface DockerBuilderConfigGetters {
 
 export interface JavaScriptBuilderConfigGetters {
   getJavaScriptBuildCommand: Getter
+  getJavaScriptBuiltPath: Getter
 }
 
 export type UnionBuilderConfigGetters = DockerBuilderConfigGetters | JavaScriptBuilderConfigGetters
