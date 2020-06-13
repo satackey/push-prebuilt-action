@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - '**'
+  delete:
 
 jobs:
   build_and_push:
@@ -21,11 +22,6 @@ jobs:
     - name: Install dependencies
       run: |
         yarn install --frozen-lockfile --non-interactive
-
-    - name: Extract
-      id: extract
-      run: |
-        echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
 
     - name: Compile
       run: yarn ttsc
