@@ -44,8 +44,6 @@ export class JavaScriptActionBuilder extends ActionBuilder {
 
   async buildAllEntrypoints() {
     const entrypointCandidacies: ('pre' | 'main' | 'post')[] = [`pre`, `main`, `post`]
-
-    const compiler = this.getCompiler()
     await Promise.all(entrypointCandidacies.map(this.buildSingleEntrypoint))
   }
 
