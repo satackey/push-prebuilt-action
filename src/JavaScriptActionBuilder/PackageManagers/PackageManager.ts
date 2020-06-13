@@ -28,18 +28,16 @@ export class PackageManager {
     return false
   }
 
-  async exec(commandWithoutPrefix: string, args?: string[], options?: ExecOptions) {
-    const execCwd = () => exec.exec(commandWithPrefix, args, {
+  async exec(command: string, args?: string[], options?: ExecOptions) {
+    const execCwd = async () => await exec.exec(command, args, {
       cwd: this.projectDir,
       ...options
     })
 
     // ---
-
-    const commandWithPrefix = `${this.RUN_PREFIX} ${commandWithoutPrefix}`
     if (!options?.silent) {
       const argsStr = args != null ? args.join(' ') : ''
-      return core.group(`${commandWithPrefix} ${argsStr}`, execCwd)
+      return await core.group(`${command} ${argsStr}`, execCwd)
     }
     return execCwd()
   }
