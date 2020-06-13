@@ -28,6 +28,7 @@ const main = async () => {
 const createConfigGetters = (): IntersectionBuilderConfigGetters => ({
   getJavaScriptBuildCommand: (required) => core.getInput(`js-build-command`, { required }),
   getJavaScriptBuiltPath: (required) => core.getInput(`js-built-path`, { required }),
+  getJavaScriptOverrideMain: (required) => core.getInput(`js-override-main`, { required }),
   getDockerRegistry: (required) => core.getInput(`docker-registry`, { required }),
   getDockerLoginUser: (required) => core.getInput(`docker-user`, { required }),
   getDockerLoginToken: (required) => core.getInput(`docker-token`, { required }),

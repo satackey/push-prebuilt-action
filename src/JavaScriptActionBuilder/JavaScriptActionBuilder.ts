@@ -23,6 +23,10 @@ export class JavaScriptActionBuilder extends ActionBuilder {
     core.debug(`constructor: ${JSON.stringify(this.actionConfig.runs)}`)
     this.configGetters = configGetters
     this.workdir = workdir
+
+    if (this.configGetters.getJavaScriptOverrideMain(false) !== '') {
+      this.actionConfig.runs.main = this.configGetters.getJavaScriptOverrideMain(true)
+    }
   }
 
   private async installNccGlobally() {

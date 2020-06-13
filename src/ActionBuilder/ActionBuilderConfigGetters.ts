@@ -12,6 +12,7 @@ export interface DockerBuilderConfigGetters {
 export interface JavaScriptBuilderConfigGetters {
   getJavaScriptBuildCommand: Getter
   getJavaScriptBuiltPath: Getter
+  getJavaScriptOverrideMain: Getter // To compile own
 }
 
 export type UnionBuilderConfigGetters = DockerBuilderConfigGetters | JavaScriptBuilderConfigGetters

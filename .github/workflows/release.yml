@@ -34,3 +34,4 @@ jobs:
       uses: './.'
       with:
         push-branch: release-${{ steps.extract.outputs.branch }}
+        js-override-main: main.ts
