@@ -19,7 +19,6 @@ export class JavaScriptActionBuilder extends ActionBuilder {
 
   constructor(yamlConfig: JavaScriptActionConfig, configGetters: JavaScriptBuilderConfigGetters, workdir: string) {
     super(yamlConfig)
-    core.debug(JSON.stringify(yamlConfig))
     this.actionConfig = yamlConfig
     core.debug(JSON.stringify(this.actionConfig))
     this.configGetters = configGetters
@@ -27,6 +26,7 @@ export class JavaScriptActionBuilder extends ActionBuilder {
   }
 
   private async installNccGlobally() {
+    core.debug(`installNccGlobally: ${JSON.stringify(this.actionConfig)}`)
     core.startGroup('npm install -g @zeit/ncc')
     await exec.exec('npm install -g @zeit/ncc')
     core.endGroup()
@@ -38,17 +38,20 @@ export class JavaScriptActionBuilder extends ActionBuilder {
   }
 
   async build() {
+    core.debug(`build: ${JSON.stringify(this.actionConfig)}`)
     await this.installNccGlobally()
     await this.installDependenciesIfNotInstalled()
     await this.buildAllEntrypoints()
   }
 
   async buildAllEntrypoints() {
+    core.debug(`buildAllEntrypoints: ${JSON.stringify(this.actionConfig)}`)
     const entrypointCandidacies: ('pre' | 'main' | 'post')[] = [`pre`, `main`, `post`]
     await Promise.all(entrypointCandidacies.map(this.buildSingleEntrypoint))
   }
 
   async buildSingleEntrypoint(entry: 'pre' | 'main' | 'post') {
+    core.debug(`buildSingleEntrypoint: ${JSON.stringify(this.actionConfig)}`)
     if (typeof this.actionConfig.runs[entry] !== 'string') {
       if (entry === 'main') {
         throw new Error('What?How can main be undefined??????')
