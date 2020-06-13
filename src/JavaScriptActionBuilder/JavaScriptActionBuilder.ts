@@ -47,7 +47,7 @@ export class JavaScriptActionBuilder extends ActionBuilder {
   async buildAllEntrypoints() {
     core.debug(`buildAllEntrypoints: ${JSON.stringify(this.actionConfig.runs)}`)
     const entrypointCandidacies: ('pre' | 'main' | 'post')[] = [`pre`, `main`, `post`]
-    await Promise.all(entrypointCandidacies.map(() => this.buildSingleEntrypoint))
+    await Promise.all(entrypointCandidacies.map(entry => this.buildSingleEntrypoint(entry)))
   }
 
   async buildSingleEntrypoint(entry: 'pre' | 'main' | 'post') {
