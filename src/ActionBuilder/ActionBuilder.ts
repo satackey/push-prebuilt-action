@@ -128,7 +128,7 @@ export class ActionBuilder {
 
   async commit(unformattedBranch: string, tags: string[], message: string) {
     const formattedBranch = format(unformattedBranch, {
-      branch: this.getCurrentBranchName()
+      branch: await this.getCurrentBranchName()
     })
     this.assertCommitArgs(formattedBranch, tags, message)
     await this.commitWithoutCheckingArgs(formattedBranch, tags, message)
