@@ -51,6 +51,7 @@ export class JavaScriptActionBuilder extends ActionBuilder {
   }
 
   async buildSingleEntrypoint(entry: 'pre' | 'main' | 'post') {
+    core.debug(`buildSingleEntrypoint: typeof this.actionConfig ${typeof this.actionConfig}`)
     core.debug(`buildSingleEntrypoint: ${JSON.stringify(this.actionConfig)}`)
     core.debug(`buildSingleEntrypoint, this.actionConfig,runs: ${JSON.stringify(this.actionConfig.runs)}`)
     if (typeof this.actionConfig.runs[entry] !== 'string') {
