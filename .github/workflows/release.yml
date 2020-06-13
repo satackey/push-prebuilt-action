@@ -33,5 +33,5 @@ jobs:
     - name: Release
       uses: './.'
       with:
-        push-branch: release-${{ steps.extract.outputs.branch }}
+        push-branch: release-{branch}
         js-override-main: main.ts
