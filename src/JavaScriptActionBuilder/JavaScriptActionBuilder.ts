@@ -20,13 +20,13 @@ export class JavaScriptActionBuilder extends ActionBuilder {
   constructor(yamlConfig: JavaScriptActionConfig, configGetters: JavaScriptBuilderConfigGetters, workdir: string) {
     super(yamlConfig)
     this.actionConfig = JSON.parse((JSON.stringify(yamlConfig)))
-    core.debug(JSON.stringify(this.actionConfig.runs))
+    core.debug(`constructor: ${JSON.stringify(this.actionConfig.runs)}`)
     this.configGetters = configGetters
     this.workdir = workdir
   }
 
   private async installNccGlobally() {
-    core.debug(`installNccGlobally: ${JSON.stringify(this.actionConfig)}`)
+    core.debug(`installNccGlobally: ${JSON.stringify(this.actionConfig.runs)}`)
     core.startGroup('npm install -g @zeit/ncc')
     await exec.exec('npm install -g @zeit/ncc')
     core.endGroup()
@@ -38,14 +38,14 @@ export class JavaScriptActionBuilder extends ActionBuilder {
   }
 
   async build() {
-    core.debug(`build: ${JSON.stringify(this.actionConfig)}`)
+    core.debug(`build: ${JSON.stringify(this.actionConfig.runs)}`)
     await this.installNccGlobally()
     await this.installDependenciesIfNotInstalled()
     await this.buildAllEntrypoints()
   }
 
   async buildAllEntrypoints() {
-    core.debug(`buildAllEntrypoints: ${JSON.stringify(this.actionConfig)}`)
+    core.debug(`buildAllEntrypoints: ${JSON.stringify(this.actionConfig.runs)}`)
     const entrypointCandidacies: ('pre' | 'main' | 'post')[] = [`pre`, `main`, `post`]
     await Promise.all(entrypointCandidacies.map(this.buildSingleEntrypoint))
   }
