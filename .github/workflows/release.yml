@@ -4,6 +4,7 @@ on:
   push:
     branches:
     - '**'
+  delete:
 
 jobs:
   build_and_push:
@@ -22,16 +23,11 @@ jobs:
       run: |
         yarn install --frozen-lockfile --non-interactive
 
-    - name: Extract
-      id: extract
-      run: |
-        echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
-
     - name: Compile
-      run: yarn run pack
+      run: yarn ttsc
 
     - name: Release
       uses: './.'
       with:
-        push-branch: release-${{ steps.extract.outputs.branch }}
-        js-build-command: yarn run pack 
+        push-branch: release-{branch}
+        js-override-main: main.ts

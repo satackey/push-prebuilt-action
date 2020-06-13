@@ -11,10 +11,12 @@ export interface DockerBuilderConfigGetters {
 
 export interface JavaScriptBuilderConfigGetters {
   getJavaScriptBuildCommand: Getter
+  getJavaScriptBuiltPath: Getter
+  getJavaScriptOverrideMain: Getter // To compile own
 }
 
-export type UnionBuilderConfigGetters = DockerBuilderConfigGetters & JavaScriptBuilderConfigGetters
-export type IntersectionBuilderConfigGetters = DockerBuilderConfigGetters | JavaScriptBuilderConfigGetters
+export type UnionBuilderConfigGetters = DockerBuilderConfigGetters | JavaScriptBuilderConfigGetters
+export type IntersectionBuilderConfigGetters = DockerBuilderConfigGetters & JavaScriptBuilderConfigGetters
 
 export const defaultGetter: Getter = (required) => {
   if (required) {

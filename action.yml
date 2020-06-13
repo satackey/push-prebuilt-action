@@ -26,6 +26,14 @@ inputs:
     required: true
     default: action.yml action.yaml dist .git
 
+  delete-branch:
+    description: Whether to delete the branch when original branch has deleted.
+    required: true
+    default: ${{ github.event_name == 'delete' }}
+  delete-branch-ref:
+    description: The deleted original branch name.
+    required: false
+    default: ${{ github.event.ref }} 
   push-branch:
     description: The name of branch to push compiled file.
     required: false
@@ -63,10 +71,14 @@ inputs:
   js-build-command:
     description: >
       The command and arguments to build JavaScript or TypeScript files.
-      The artifacts must be in the dist/ directory and entrypoint must be dist/index.js.
+      The artifacts must be specified by `js-built-path`.
     required: false
-    default: ncc build --v8-cache {main}
+  js-built-path:
+    description: >
+      The path to the location of the files built by `js-build-command`.
+    required: false
+
 runs:
   using: node12
-  # to compile own
-  main: dist/index.js
+  # to compile self
+  main: ts-dist/main.js

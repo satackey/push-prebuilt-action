@@ -1,11 +1,17 @@
 import * as core from '@actions/core'
 
-import { createBuilder } from './src/CreateActionBuilder'
-import { UnionBuilderConfigGetters } from './src/ActionBuilderConfigGetters'
+import { createBuilder } from './src/ActionBuilder/CreateActionBuilder'
+import { IntersectionBuilderConfigGetters } from './src/ActionBuilder/ActionBuilderConfigGetters'
+import { Branch } from './src/Branch'
 
 const main = async () => {
   const configGetters = createConfigGetters()
   const actionBuilder = await createBuilder(process.cwd(), configGetters)
+
+  if (core.getInput('push-branch') !== '' && core.getInput(`delete-branch`, { required: true }) === `true`) {
+    const branch = new Branch()
+    branch.deleteBranchIfExists(core.getInput(`delete-branch-ref`, { required: true }), core.getInput('push-branch', { required: true }))
+  }
 
   await actionBuilder.build()
   await actionBuilder.saveActionConfig()
@@ -25,8 +31,10 @@ const main = async () => {
   }
 }
 
-const createConfigGetters = (): UnionBuilderConfigGetters => ({
+const createConfigGetters = (): IntersectionBuilderConfigGetters => ({
   getJavaScriptBuildCommand: (required) => core.getInput(`js-build-command`, { required }),
+  getJavaScriptBuiltPath: (required) => core.getInput(`js-built-path`, { required }),
+  getJavaScriptOverrideMain: (required) => core.getInput(`js-override-main`, { required }),
   getDockerRegistry: (required) => core.getInput(`docker-registry`, { required }),
   getDockerLoginUser: (required) => core.getInput(`docker-user`, { required }),
   getDockerLoginToken: (required) => core.getInput(`docker-token`, { required }),
@@ -36,5 +44,5 @@ const createConfigGetters = (): UnionBuilderConfigGetters => ({
 
 main().catch(e => {
   console.error(e)
-  process.exit(1)
+  core.setFailed(e)
 })

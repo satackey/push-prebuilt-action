@@ -67,6 +67,6 @@
     ]
   },
   "include": [
-    "index.ts",
+    "main.ts",
   ]
 }
