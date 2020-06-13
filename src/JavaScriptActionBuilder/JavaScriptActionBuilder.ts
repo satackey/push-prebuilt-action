@@ -2,7 +2,7 @@ import * as core from '@actions/core'
 import exec from 'actions-exec-listener'
 
 import { ActionBuilder } from '../ActionBuilder/ActionBuilder'
-import { JavaScriptActionConfig, ActionConfig } from '../ActionConfig'
+import { JavaScriptActionConfig } from '../ActionConfig'
 import { JavaScriptBuilderConfigGetters } from '../ActionBuilder/ActionBuilderConfigGetters'
 import { createPackageManager } from './PackageManagers/CreatePackageManager'
 import { PackageManager } from './PackageManagers/PackageManager'

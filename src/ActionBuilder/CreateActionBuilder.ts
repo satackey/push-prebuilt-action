@@ -16,6 +16,8 @@ export const createBuilder = async (yamlDir: string, configGetters: Intersection
   const actionConfig = await readYamlFileFrom(yamlFilePath)
   assertIsActionConfig(actionConfig)
 
+  core.debug(JSON.stringify(actionConfig.runs))
+
   const builder = await createBuilderFrom(actionConfig, configGetters, yamlDir)
   builder.actionConfigPath = yamlFilePath
 
