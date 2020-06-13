@@ -10,6 +10,6 @@ export class Yarn extends PackageManager {
   }
 
   async installDependencies() {
-    await this.exec(`yarn install --frozen-lockfile --non-interactive`)
+    await super.exec(`yarn install --frozen-lockfile --non-interactive`)
   }
 }

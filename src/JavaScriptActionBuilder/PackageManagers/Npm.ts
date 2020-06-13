@@ -10,6 +10,6 @@ export class Npm extends PackageManager {
   }
 
   async installDependencies() {
-    await this.exec(`npm ci`)
+    await super.exec(`npm ci`)
   }
 }
