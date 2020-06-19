@@ -32,6 +32,7 @@ jobs:
 
   rebuild:
     runs-on: ubuntu-latest
+    if: github.event_name != 'delete'
     needs: [build_and_push]
 
     steps:
