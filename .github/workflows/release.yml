@@ -56,6 +56,7 @@ jobs:
 
     - name: Release
       uses: './prebuilt'
+      if: github.event_name != 'delete'
       with:
         push-branch: release-{branch}
         js-override-main: main.ts
