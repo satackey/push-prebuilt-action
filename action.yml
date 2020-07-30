@@ -9,11 +9,11 @@ inputs:
   committer-name:
     description: The name to set as git `user.name`.
     required: false
-    default: actions-user
+    default: github-actions[bot]
   committer-email:
     description: The email to set as git `user.email`.
     required: false
-    default: actions@github.com
+    default: 41898282+github-actions[bot]@users.noreply.github.com
   commit-message:
     description: >
       The commit message for the compiled.
