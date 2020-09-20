@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@types/child-process-promise": "^2.2.1",
-    "@types/jest": "^26.0.13",
+    "@types/jest": "^26.0.14",
     "@types/js-yaml": "^3.12.5",
     "@types/node": "^14.10.1",
     "@types/string-format": "^2.0.0",
