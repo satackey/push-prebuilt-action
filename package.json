@@ -14,7 +14,7 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "actions-exec-listener": "^0.0.2",
-    "js-yaml": "^3.13.1",
+    "js-yaml": "^4.0.0",
     "rimraf": "^3.0.2",
     "string-format": "^2.0.0"
   },
