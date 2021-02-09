@@ -30,7 +30,7 @@
     "ts-jest": "^25.3.1",
     "ts-node": "^9.0.0",
     "ttypescript": "^1.5.12",
-    "typescript": "^3.9.7",
+    "typescript": "^3.9.8",
     "typescript-is": "^0.16.3"
   }
 }
