@@ -3570,10 +3570,10 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript-is@^0.16.3:
-  version "0.16.3"
-  resolved "https://registry.yarnpkg.com/typescript-is/-/typescript-is-0.16.3.tgz#85eefd5f13ee03ecb0d4aed34c0ac0c773d271c6"
-  integrity sha512-Vlpo9YFnjWEBUyfD5Yx3MLYupxMdK15ZBHkDYOWpRZWcjXS2XNScKMWhY5JSouu9+q4wduGz/v1lfZdW9Hk+qQ==
+typescript-is@^0.17.1:
+  version "0.17.1"
+  resolved "https://registry.yarnpkg.com/typescript-is/-/typescript-is-0.17.1.tgz#d1308dc9a318cc800fc86ec4843a4c8f853a17f7"
+  integrity sha512-RIz2hSJO5LPh5URMMf+5BTES+kfggk47qQ+Jez0Vg02LYT499OHsHr3V+GUsmvrkWQKd3Jgu6qo3C9Jz2N4wLQ==
   dependencies:
     nested-error-stacks "^2"
     tsutils "^3.17.1"
