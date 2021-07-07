@@ -1,39 +1,35 @@
 name: Push pre-built JavaScript / TypeScript / Docker container GitHub Action
 description: Speed up CI execution time by pre-building.
-
 branding:
   icon: git-branch
   color: white
-
 inputs:
   committer-name:
     description: The name to set as git `user.name`.
     required: false
-    default: github-actions[bot]
+    default: 'github-actions[bot]'
   committer-email:
     description: The email to set as git `user.email`.
     required: false
-    default: 41898282+github-actions[bot]@users.noreply.github.com
+    default: '41898282+github-actions[bot]@users.noreply.github.com'
   commit-message:
     description: >
-      The commit message for the compiled.
-      Leave blank to avoid committing and pushing.
+      The commit message for the compiled. Leave blank to avoid committing and
+      pushing.
     required: true
     default: '[auto]'
-
   exclude-from-cleanup:
     description: Files/dirs to leave for commit.
     required: true
     default: action.yml action.yaml dist .git
-
   delete-branch:
     description: Whether to delete the branch when original branch has deleted.
     required: true
-    default: ${{ github.event_name == 'delete' }}
+    default: '${{ github.event_name == ''delete'' }}'
   delete-branch-ref:
     description: The deleted original branch name.
     required: false
-    default: ${{ github.event.ref }} 
+    default: '${{ github.event.ref }}'
   push-branch:
     description: The name of branch to push compiled file.
     required: false
@@ -41,44 +37,35 @@ inputs:
     description: The names to tag the compiled file commit.
     required: false
   force-push:
-    description: >
-      Whether to force push to branch or tags.
-      Either 'true' or 'false'.
+    description: |
+      Whether to force push to branch or tags. Either 'true' or 'false'.
     required: true
     default: 'true'
-
   docker-registry:
     description: The server URL of the Docker registry.
     required: false
-    # default: docker.pkg.github.io
   docker-repotag:
     description: The Docker registry's repository of push action image.
     required: false
-    # default: docker.pkg.github.com/${{ github.repository }}/github-action-image:${{ github.sha }}
   docker-user:
     description: The username to login to the Docker registry.
     required: false
-    # default: x-access-token # https://github.com/actions/checkout/blob/01aecccf739ca6ff86c0539fbc67a7a5007bbc81/src/git-auth-helper.ts#L57
   docker-token:
     description: The token to login to the Docker registry.
     required: false
-    # default: ${{ github.token }}
   docker-build-command:
     description: The command and arguments to build Docker image.
     required: false
-    default: docker build -t {repotag} .
-
+    default: 'docker build -t {repotag} .'
   js-build-command:
     description: >
-      The command and arguments to build JavaScript or TypeScript files.
-      The artifacts must be specified by `js-built-path`.
+      The command and arguments to build JavaScript or TypeScript files. The
+      artifacts must be specified by `js-built-path`.
     required: false
   js-built-path:
-    description: >
+    description: |
       The path to the location of the files built by `js-build-command`.
     required: false
-
 runs:
   using: node12
-  # to compile self
-  main: ts-dist/main.js
+  main: dist/ttsc-dist/main.js/index.js
